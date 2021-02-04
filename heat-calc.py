@@ -26,6 +26,7 @@ import time
 # 4.c : Load Profile Generation
 ## Input 
 ## Outputs 
+#howdy
 
 # 4.d : Equipment Demand Function
 ## Input 
