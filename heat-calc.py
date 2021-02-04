@@ -51,11 +51,11 @@ import time
 ## Input 
 ## Outputs 
 
-# 4.j : Variable vs Time Plotter function 
+# 4.j : Variable vs Time Plotter function - @max
 ## Input 
 ## Outputs 
 
-# 4.k : Variable vs Variable Plotter Function 
+# 4.k : Variable vs Variable Plotter Function - @max
 ## Input 
 ## Outputs 
 
