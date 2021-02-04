@@ -40,7 +40,7 @@ import time
 ## Input 
 ## Outputs 
 
-# 4.g : Electric Cost Calculator Function 
+# 4.g : Electric Cost Calculator Function - @aks
 ## Input 
 ## Outputs 
 
