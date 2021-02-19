@@ -30,7 +30,7 @@ start_time = time.time()
 # =============================================================================
 # *** User defined inputs ***
 
-Equipment= {'Quantity': 1, 'Size' : 200, 'Turndown' : 0.05 }
+Equipment = {'Quantity': 1, 'Size' : 200, 'Turndown' : 0.05 }
 #Todo : Unmet hours count , so you can after 10 of unmet hours run at turn doen 1 time 
 # =============================================================================
 

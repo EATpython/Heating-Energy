@@ -13,7 +13,7 @@ from tkinter import messagebox
 # ====================================================================================================
 # CONFIGURATION: NONE
 
-# This is a test! {>_<}
+
 # def main():
 #     open_csv_file()
 #     read_csv()
@@ -139,8 +139,8 @@ class UserInputsApp:
         self.button3.bind('<Button-1>', self.close_wind)
         self.button3.grid(row=0, column=2, sticky='nsew')
 
-    # def clear_values(self, event):
-    #     self.entry2.delete(first=0, last=50)
+    def clear_values(self, event):
+        self.entry2.delete(first=0, last=50)
 
     def get_values(self, event):
         for entry in self.user_inputs:
@@ -263,6 +263,8 @@ def fill_empty_fields():
     # allowable_missing_data = 20
     # fill in cells with missing data with value from previous row
     df.fillna(axis=0, method='ffill', inplace=True)  # , limit=allowable_missing_data)
+    #TODO: Use average values. Use last known value in any given column and the next
+    #TODO: available value to obtain avg values to fill in gaps with
 
     print('EMPTY FIELDS POPULATED')
     return df
