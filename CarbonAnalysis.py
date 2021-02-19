@@ -1,8 +1,9 @@
 # WORKING - Finding latest, oldest, and delta between dates from data set
+# Update to reference the raw data file being used and references to the data via headers
 # NOT WORKING - calculating the therms from data (need to skip first row)
 import pandas as pd
 
-df = pd.read_csv(r'input.csv')
+df = pd.read_csv(r'input.csv') # Update file name and references within that file
 df['Start'] = df['Start'].astype('datetime64[ns]')
 df['End'] = df['End'].astype('datetime64[ns]')
 
