@@ -10,6 +10,8 @@ import matplotlib.pyplot as plt
 import tkinter as tk
 from tkinter import filedialog
 from tkinter import messagebox
+from scipy.optimize import curve_fit
+from matplotlib import pyplot as plt
 
 # Step 2 - Lets Define all the User Inputs Required
 
@@ -65,7 +67,7 @@ print("\n" + 'Data cleaning in process...')
 # ====================================================================================================
 file_open_title = "Select Raw CSV File"
 
-
+# Todo: identify process for reading xls files in lieu of csv
 def open_csv_file():
     tk.Tk().withdraw()
     file_path = filedialog.askopenfilename(filetypes=[('CSV', '*.csv')], title=file_open_title)
@@ -314,7 +316,7 @@ def export_csv():
     df_md_ind.to_csv(csv_file.replace('.csv', '_OUT_Missing_Data_Report.csv'))
 
     print('RESULTS EXPORTED INTO CSV FILES')
-    return
+    return df
 
 
 export_csv()
@@ -350,19 +352,20 @@ tk.messagebox.showinfo('Status', 'Data Cleaning Process Complete!')
 # 4.d : EquipmentDemand Function
 ## Libraries : Pandas as pd 
 ## Input : LoadProfile, data_path, Equipment
-## Outputs : EquipmentOutput 
+## df variable pulled from fill_empty_fields function. Returns clean dataset.
+## Outputs : EquipmentOutput
 
-data_path = df.copy()
-LoadProfile = pd.read_csv(data_path + '/Load Profile.CSV', index_col=0) 
+LoadProfile = fill_empty_fields() #returns dataframe 'df' values
+
 # =============================================================================
 # *** User defined inputs ***
 
-Equipment= {'Quantity': 1, 'Size' : 200, 'Turndown' : 0.05 }
+Equipment = {'Quantity': 1, 'Size': 200, 'Turndown' : 0.05 }
+# Todo create popup to alot for user input
 # =============================================================================
-#Todo : Unmet hours count , so you can after 10 of unmet hours run at turn doen 1 time 
+# Todo : Unmet hours count , so you can after 10 of unmet hours run at turn doen 1 time
 # *** Defining the calculation Function ***
-def EquipmentDemand(row , Equipment ):
-    
+def EquipmentDemand(row, Equipment):
     EquipQuantity = Equipment['Quantity']
     EquipMax = Equipment['Size'] 
     EquipTD = Equipment['Turndown']
@@ -377,13 +380,15 @@ def EquipmentDemand(row , Equipment ):
 # ***How to call this function *** 
 # ***defining the data frames ***
 # temporary input data fram 
-Load_Temp = abs(pd.DataFrame ( data = LoadProfile['HWLoad']))  #converting back to Data frame 
-#output data frame
+Load_Temp = abs(pd.DataFrame (data = LoadProfile['HWLoad'])) # converting back to Data frame
+# Todo: move into data cleaning section of script
+# output data frame
 EquipmentOutput = pd.DataFrame(columns=['EquipmentOutput'])
-#Function Call 
-EquipmentOutput['EquipmentOutput'] = Load_Temp.apply(EquipmentDemand, axis = 1 , Equipment = Equipment)
-#saving to CSV, this can be eliminated 
-EquipmentOutput.to_csv('EquipmentOutput.csv') 
+# Function Call
+EquipmentOutput['EquipmentOutput'] = Load_Temp.apply(EquipmentDemand, axis = 1, Equipment = Equipment)
+# saving to CSV, this can be eliminated
+# EquipmentOutput.to_csv('EquipmentOutput.csv')
+print(EquipmentOutput)
 #################################################################################################################
 
 
@@ -392,21 +397,19 @@ EquipmentOutput.to_csv('EquipmentOutput.csv')
 ## Libraries : Pandas as pd 
 ## Input DataPath, EquipmentOutput, Boiler 
 ## Outputs BoilerConsumption 
-data_path = 'C:/Users/Taraneh/Desktop/Python/Sample Data'
- 
-EquipmentOutput = pd.read_csv(data_path + '/EquipmentOutput.csv', index_col=0) 
+
 # =============================================================================
 # *** User defined inputs ***
 
 Boiler = {'Efficiency': 0.8, 'Type' : 'Gas' }
+# Todo create popup to a lot for user input
+
 # =============================================================================
 # *** Defining the calculation Function ***
  
 def BoilerInput(row , Boiler ):
-    
     BoilerEfficiency = Boiler['Efficiency']
-    
-    return  row['EquipmentOutput'] * BoilerEfficiency 
+    return row['EquipmentOutput'] * BoilerEfficiency
 # =============================================================================
 # ***How to call this function *** 
 
@@ -417,7 +420,7 @@ BoilerConsumption['BoilerInput'] = EquipmentOutput.apply(BoilerInput, axis = 1 ,
 BoilerAnnualConsumption = BoilerConsumption.sum(axis=0)
 
 BoilerAnnualTherms = BoilerAnnualConsumption/1000
-
+# Todo: simplify code through the use of dataframes to perform iteration
 ##############################################################################
 
 
@@ -429,30 +432,28 @@ BoilerAnnualTherms = BoilerAnnualConsumption/1000
 
 
 # =============================================================================
-# Import all the needed Librari
-import numpy as np 
-import pandas as pd
-from scipy.optimize import curve_fit 
-from matplotlib import pyplot as plt 
+
 # =============================================================================
 # Here we define the chiller tons and kw s : we need to call this ChillerPerformance
 tons = np.array([200,180,160,140,120,100,80,60,48])
 kws = np.array([236.10,191.70,157.20,131.20,105.70,80.02,59.81,47.39,41.89])
-n = 6 # we have to find R for numbers 1 through 6 and find the best fit, n anr R value 
+n = 6 # we have to find R for numbers 1 through 6 and find the best fit, n anr R value
+# Todo: identify what information would be needed from an end user stand point. big picture, different functions
+## would call for specific columns of data
 # =============================================================================
 
 # =============================================================================
-#Calculate the polynomial 
-#to do : find the R for the fitted curve 
+# Calculate the polynomial
+# Todo: find the R for the fitted curve
 
-def ChillerKW (Load, tons = tons, kws = kws): 
-    curve_coef = np.polyfit(tons,kws,n)
+
+def ChillerKW (Load_Frame, tons = tons, kws = kws):
+    curve_coef = np.polyfit(tons, kws, n)
     chillerkw = np.poly1d(curve_coef)
     
-    return chillerkw(Load)
+    return chillerkw(Load_Frame)
 
-df = pd.DataFrame([60,70,66])
-#need to work on how to call this 
+# need to work on how to call this
 ##############################################################################
 
 
@@ -496,15 +497,15 @@ def draw_plot(df):
     y_values = df.iloc[:,1] # Values in the 2nd column will be plotted on the y-axis
     x_values = range(len(y_values)) # x-axis is just a range of the same length as y_values
     
-    y_label = df.columns[1] # Name of 2nd column is y-axis label
-    x_label = df.columns[0] # Name of 1st column is x-axis label
+    y_label = df.columns[1]  # Name of 2nd column is y-axis label
+    x_label = df.columns[0]  # Name of 1st column is x-axis label
 
     fig, ax = plt.subplots()  # Create a figure containing a single axes.
-    ax.set_title(y_label + ' vs. ' + x_label) # set the title 
-    ax.set_xlabel(x_label) # label the x-axis
-    ax.set_ylabel(y_label) #label the y-axis
+    ax.set_title(y_label + ' vs. ' + x_label)  # set the title
+    ax.set_xlabel(x_label)  # label the x-axis
+    ax.set_ylabel(y_label)  # label the y-axis
     ax.plot(x_values, y_values,lw=0.1)  # Plot the data
-    plt.show() #show the plot
+    plt.show()  # show the plot
     return
 
 ##############################################################################
@@ -515,6 +516,6 @@ def draw_plot(df):
 
 
 ##############################################################################
-# 4.l : DIsstribution Energy Consumption 
+# 4.l : Disstribution Energy Consumption
 ## Input 
 ## Outputs 
