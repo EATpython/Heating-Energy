@@ -7,6 +7,9 @@ import numpy as np
 import warnings
 import time
 import matplotlib.pyplot as plt
+import tkinter as tk
+from tkinter import filedialog
+from tkinter import messagebox
 
 # Step 2 - Lets Define all the User Inputs Required
 
@@ -31,11 +34,11 @@ import matplotlib.pyplot as plt
 #################################################################################################################
 # 4.b : Data Cleaning
 # ====================================================================================================
-import pandas as pd
-import time
-import tkinter as tk
-from tkinter import filedialog
-from tkinter import messagebox
+# import pandas as pd
+# import time
+# import tkinter as tk
+# from tkinter import filedialog
+# from tkinter import messagebox
 # ====================================================================================================
 # CONFIGURATION: NONE
 
@@ -246,8 +249,6 @@ def consec_miss_data():
 
     print('CONSECUTIVE MISSING DATA REVIEW COMPLETE')
     return df_md_ind_results, df_md_ind
-
-
 # print(consec_miss_data())
 
 
@@ -351,7 +352,7 @@ tk.messagebox.showinfo('Status', 'Data Cleaning Process Complete!')
 ## Input : LoadProfile, data_path, Equipment
 ## Outputs : EquipmentOutput 
 
-data_path =  xxxxxxxxxx
+data_path = df.copy()
 LoadProfile = pd.read_csv(data_path + '/Load Profile.CSV', index_col=0) 
 # =============================================================================
 # *** User defined inputs ***
