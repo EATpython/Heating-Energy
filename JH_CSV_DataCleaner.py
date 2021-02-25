@@ -304,7 +304,7 @@ print(">>>TOTAL RUNTIME: %s seconds" % (time.time() - main_start_time).__round__
 tk.messagebox.showinfo('Status', 'Data Cleaning Process Complete!')
 
 # ====================================================================================================
-# >>>END OF SCRIPT<<<
+# >>>END OF DATA CLEANING SCRIPT<<<
 # ====================================================================================================
 # if __name__ == "__main__":
 #     main()
