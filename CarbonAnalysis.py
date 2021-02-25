@@ -3,6 +3,7 @@
 # NOT WORKING - calculating the therms from data (need to skip first row)
 import pandas as pd
 
+## input will be boiler output data
 df = pd.read_csv(r'input.csv') # Update file name and references within that file
 df['Start'] = df['Start'].astype('datetime64[ns]')
 df['End'] = df['End'].astype('datetime64[ns]')
@@ -17,7 +18,7 @@ print("Number of days between:", delta_days)
 
 # DOES NOT WORK - Calculating total usage from "Usage" column.
 therm = pd.read_csv(r'input.csv')
-next(therm) # <-- troubleshoot here; meant to skip first row (header) before iterating
+next(therm)  # <-- troubleshoot here; meant to skip first row (header) before iterating
 total = 0
 for row in therm:
    total += float(row[2])
@@ -36,6 +37,6 @@ print(annual_therm)
 # Location not in SoCalGas territory, use Energy Star data: Emission factor = 53.11 kgCO2/MMBtu, MMBtu = 10 therm
 # https://portfoliomanager.energystar.gov/pdf/reference/Emissions.pdf
 
-emission_factor = 53.07 # kgCO2/MMBtu, where MMBtu = 1,000,000 Btu = 10 therm
+emission_factor = 53.07  # kgCO2/MMBtu, where MMBtu = 1,000,000 Btu = 10 therm
 carbon_emission = annual_therm * emission_factor * 10
 print('Amount of CO2 emitted per year is ', carbon_emission, ' kgCO2/MMBtu.')

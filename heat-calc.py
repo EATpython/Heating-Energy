@@ -422,7 +422,7 @@ BoilerConsumption['BoilerInput'] = EquipmentOutput.apply(BoilerInput, axis = 1 ,
 BoilerAnnualConsumption = BoilerConsumption.sum(axis=0)
 
 BoilerAnnualTherms = BoilerAnnualConsumption/1000
-# Todo: simplify code through the use of dataframes to perform iteration
+# Todo: simplify code through the use of dataframes to perform iteration in liue of using .apply method
 ##############################################################################
 
 
@@ -462,7 +462,8 @@ def ChillerKW (Load_Frame, tons = tons, kws = kws):
 ##############################################################################
 # 4.g : Electric Cost Calculator Function - @aks
 ## Input 
-## Outputs 
+## Outputs
+# Todo: akshay to past in coding from local files
 ##############################################################################
 
 
@@ -496,8 +497,8 @@ def ChillerKW (Load_Frame, tons = tons, kws = kws):
 #   -If it's always going to be 8760 data, we can work on making the x-axis prettier with month names
 #
 def draw_plot(df):
-    y_values = df.iloc[:,1] # Values in the 2nd column will be plotted on the y-axis
-    x_values = range(len(y_values)) # x-axis is just a range of the same length as y_values
+    y_values = df.iloc[:,1]  # Values in the 2nd column will be plotted on the y-axis
+    x_values = range(len(y_values))  # x-axis is just a range of the same length as y_values
     
     y_label = df.columns[1]  # Name of 2nd column is y-axis label
     x_label = df.columns[0]  # Name of 1st column is x-axis label
@@ -506,7 +507,7 @@ def draw_plot(df):
     ax.set_title(y_label + ' vs. ' + x_label)  # set the title
     ax.set_xlabel(x_label)  # label the x-axis
     ax.set_ylabel(y_label)  # label the y-axis
-    ax.plot(x_values, y_values,lw=0.1)  # Plot the data
+    ax.plot(x_values, y_values, lw=0.1)  # Plot the data
     plt.show()  # show the plot
     return
 
