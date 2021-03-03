@@ -302,9 +302,8 @@ tk.messagebox.showinfo('Status', 'Data Cleaning Process Complete!')
 # ====================================================================================================
 # >>>END OF DATA CLEANING SCRIPT<<<
 # ====================================================================================================
-
-
 #################################################################################################################
+
 
 
 #################################################################################################################
@@ -312,6 +311,7 @@ tk.messagebox.showinfo('Status', 'Data Cleaning Process Complete!')
 ## Input 
 ## Outputs 
 #################################################################################################################
+
 
 
 #################################################################################################################
@@ -377,7 +377,6 @@ Boiler = {'Efficiency': 0.8, 'Type' : 'Gas' }
 # =============================================================================
 # *** Defining the calculation Function ***
 
-
 def BoilerInput(row, Boiler):
     BoilerEfficiency = Boiler['Efficiency']
     return row['EquipmentOutput'] * BoilerEfficiency
@@ -395,36 +394,41 @@ BoilerAnnualTherms = BoilerAnnualConsumption/1000
 ##############################################################################
 
 
+
 ##############################################################################
 # 4.f : Chiller Consumption Function 
 ## Libraries : Pandas as pd, numpy as np, from scipy.optimize import curve_fit 
-## Input : ChillerPerformance
+## Input : ChillerPerformance ( tons and kw) and Load.CHWwhihc i called Load_CHW 
 ## Outputs R, ChillerKw
-
-
 # =============================================================================
 
 # =============================================================================
-# Here we define the chiller tons and kw s : we need to call this ChillerPerformance
-tons = np.array([200, 180, 160, 140, 120, 100, 80, 60, 48])
-kws = np.array([236.10, 191.70, 157.20, 131.20, 105.70, 80.02, 59.81, 47.39, 41.89])
-n = 6 # we have to find R for numbers 1 through 6 and find the best fit, n anr R value
-# Todo: identify what information would be needed from an end user stand point. big picture, different functions
-## would call for specific columns of data
+# Here we define the chiller tons and kw s but its user input in future
+tons = np.array([200,180,160,140,120,100,80,60,48])
+kws = np.array([236.10,191.70,157.20,131.20,105.70,80.02,59.81,47.39,41.89])
+n = 6 # need to find R value to optimize this 
 # =============================================================================
 
 # =============================================================================
-# Calculate the polynomial
-# Todo: find the R for the fitted curve
+# this should come from other section of code
+Load_CHW = pd.DataFrame([236.1,60,70,66])
 
+# =============================================================================
+# Method 2 : Calculate the polynomial and sending the polynomial out 
+#to do : find the R for the fitted curve 
 
-def ChillerKW(Load_Frame, tons = tons, kws = kws):
-    curve_coef = np.polyfit(tons, kws, n)
-    chillerkw = np.poly1d(curve_coef)
+def ChillerConsumption (Load , curveTons , curveKws ):
+    def DefineChillerCurve (curveTons , curveKws ): 
+        curve_coef = np.polyfit(tons,kws,n)
+        chillerpoly = np.poly1d(curve_coef)
+        return chillerpoly
+    
+    ChillerCurve =  DefineChillerCurve( curveTons , curveKws)
+    return ChillerCurve(Load)
 
-    return chillerkw(Load_Frame)
-
-# need to work on how to call this
+#how to call this function 
+ChilerKwConsumption = pd.DataFrame(ChillerConsumption(Load = Load_CHW , curveTons=tons , curveKws=kws))
+# =============================================================================
 ##############################################################################
 
 
