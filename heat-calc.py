@@ -330,7 +330,7 @@ Equipment = {'Quantity': 1, 'Size': 200, 'Turndown' : 0.05 }
 # Todo create popup to allow for user input
 
 # =============================================================================
-# Todo : Unmet hours count , so you can after 10 of unmet hours run at turn doen 1 time
+# Todo : Unmet hours count , so you can after 10 of unmet hours run at turn done 1 time
 
 
 # *** Defining the calculation Function ***
@@ -338,8 +338,9 @@ def EquipmentDemand(row, Equipment):
     EquipQuantity = Equipment['Quantity']
     EquipMax = Equipment['Size']
     EquipTD = Equipment['Turndown']
-    if row['HWLoad'] > EquipMax * EquipTD  :
-        BoilerOut = min ( row['HWLoad'] , EquipMax * EquipQuantity )
+
+    if row['HWLoad'] > EquipMax * EquipTD:
+        BoilerOut = min(row['HWLoad'], EquipMax * EquipQuantity)
     else:
         BoilerOut = 0
 
@@ -376,7 +377,8 @@ Boiler = {'Efficiency': 0.8, 'Type' : 'Gas' }
 # =============================================================================
 # *** Defining the calculation Function ***
 
-def BoilerInput(row , Boiler ):
+
+def BoilerInput(row, Boiler):
     BoilerEfficiency = Boiler['Efficiency']
     return row['EquipmentOutput'] * BoilerEfficiency
 # =============================================================================
@@ -384,7 +386,7 @@ def BoilerInput(row , Boiler ):
 
 BoilerConsumption = pd.DataFrame(columns=['BoilerInput'])
 
-BoilerConsumption['BoilerInput'] = EquipmentOutput.apply(BoilerInput, axis = 1 , Boiler = Boiler)
+BoilerConsumption['BoilerInput'] = EquipmentOutput.apply(BoilerInput, axis=1, Boiler=Boiler)
 
 BoilerAnnualConsumption = BoilerConsumption.sum(axis=0)
 
@@ -404,8 +406,8 @@ BoilerAnnualTherms = BoilerAnnualConsumption/1000
 
 # =============================================================================
 # Here we define the chiller tons and kw s : we need to call this ChillerPerformance
-tons = np.array([200,180,160,140,120,100,80,60,48])
-kws = np.array([236.10,191.70,157.20,131.20,105.70,80.02,59.81,47.39,41.89])
+tons = np.array([200, 180, 160, 140, 120, 100, 80, 60, 48])
+kws = np.array([236.10, 191.70, 157.20, 131.20, 105.70, 80.02, 59.81, 47.39, 41.89])
 n = 6 # we have to find R for numbers 1 through 6 and find the best fit, n anr R value
 # Todo: identify what information would be needed from an end user stand point. big picture, different functions
 ## would call for specific columns of data
@@ -416,7 +418,7 @@ n = 6 # we have to find R for numbers 1 through 6 and find the best fit, n anr R
 # Todo: find the R for the fitted curve
 
 
-def ChillerKW (Load_Frame, tons = tons, kws = kws):
+def ChillerKW(Load_Frame, tons = tons, kws = kws):
     curve_coef = np.polyfit(tons, kws, n)
     chillerkw = np.poly1d(curve_coef)
 
