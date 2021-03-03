@@ -1,9 +1,9 @@
-#Practice collaboration file
+# Practice collaboration file
 
 
 # Step 1 - Lets list all the libraries that needs to be imported
 import pandas as pd
-import numpy as np 
+import numpy as np
 import warnings
 import time
 import matplotlib.pyplot as plt
@@ -20,17 +20,16 @@ from matplotlib import pyplot as plt
 
 #################################################################################################################
 # Step 4 - Lets Create all the functions 
-## Input 
+## Input
 ## Outputs 
 #################################################################################################################
 
 
 #################################################################################################################
-# 4.a : User Propmt Input, save to 
+# 4.a : User Prompt Input, save to
 ## Input 
 ## Outputs 
 #################################################################################################################
-
 
 
 #################################################################################################################
@@ -42,19 +41,6 @@ from matplotlib import pyplot as plt
 # from tkinter import filedialog
 # from tkinter import messagebox
 # ====================================================================================================
-# CONFIGURATION: NONE
-
-
-# def main():
-#     open_csv_file()
-#     read_csv()
-#     format_data_headers()
-#     user_inputs_2()
-#     consec_miss_data()
-#     analyze_empty_fields()
-#     merge_df()
-#     fill_empty_fields()
-#     export_csv()
 
 
 # ====================================================================================================
@@ -67,6 +53,7 @@ print("\n" + 'Data cleaning in process...')
 # ====================================================================================================
 file_open_title = "Select Raw CSV File"
 
+
 # Todo: identify process for reading xls files in lieu of csv
 def open_csv_file():
     tk.Tk().withdraw()
@@ -76,7 +63,7 @@ def open_csv_file():
 
 
 # ====================================================================================================
-# PROMPT USER TO SPECIFY CSV FILE & ANALYZE FILE CONTENTS
+# PROMPT USER TO SPECIFY CSV FILE, READ FILE CONTENTS & FORMAT HEADER NAMES
 # ====================================================================================================
 csv_file = open_csv_file()
 font = ("Verdana", 8)
@@ -100,11 +87,6 @@ def format_data_headers():
     # drop rows under the first_column_name column when empty
     df.dropna(subset=[first_column_name], inplace=True)
 
-    # get total number of columns
-    header_count = len(df.columns)
-    # get total number of rows
-    data_body_count = len(df)
-
     # remove any trailing spaces
     df.columns = df.columns.str.strip()
     # replace spaces " " with an "_"
@@ -112,15 +94,15 @@ def format_data_headers():
     # make all header names uppercase
     df.columns = df.columns.str.upper()
 
-    print('>>>HEADERS FORMATTED')
+    print('HEADERS FORMATTED')
     print()
     return df
 
 
-# print(format_data_headers().head())
+print(format_data_headers().head())
 
 # ====================================================================================================
-# STANDARDIZE HEADER NAMES VIA USER INPUT
+# UPDATE HEADER NAMES VIA USER INPUT
 # ====================================================================================================
 
 
@@ -137,16 +119,9 @@ class UserInputsApp:
         self.myContainer2 = tk.Frame(parent, relief=tk.FLAT, borderwidth=4, *args, **kwargs)
         self.myContainer2.grid(padx=5, pady=5)
 
-        # self.label_entry = tk.Label(self.myContainer1, text="BLDG PREFIX:", width=25, font=font)
-        # self.label_entry.grid(row=1, column=0, sticky='e')
-
         self.label_entry2 = tk.Label(self.myContainer1, text="[ BLDG ] _ [ EQUP TYPE ] _ [ EQUP NO. ] _ [ SYS ]",
                                      width=41, font=font)
         self.label_entry2.grid(row=2, column=1, sticky='nsew')
-
-        # self.entry1 = tk.Entry(self.myContainer1, width=20)
-        # self.entry1.grid(row=1, column=1, sticky='nsew')
-        # self.user_inputs.append(self.entry1)
 
         for idx, text in enumerate(header_lst):
             self.label2 = tk.Label(self.myContainer1, text=text, width=25, font=font)
@@ -155,11 +130,6 @@ class UserInputsApp:
             self.entry2 = tk.Entry(self.myContainer1, width=40)
             self.entry2.grid(row=idx + 3, column=1, sticky='nsew')
             self.user_inputs.append(self.entry2)
-
-        # self.button1 = tk.Button(self.myContainer2, text='Clear All', width=10, font=font,
-        #                          activebackground='grey', activeforeground='blue')
-        # self.button1.bind('<Button-1>', self.clear_values)
-        # self.button1.grid(row=0, column=0, sticky='nsew')
 
         self.button2 = tk.Button(self.myContainer2, text="Submit", width=10, font=font,
                                  activebackground='grey', activeforeground='blue')
@@ -170,23 +140,13 @@ class UserInputsApp:
         self.button3.bind('<Button-1>', self.close_wind)
         self.button3.grid(row=0, column=2, sticky='nsew')
 
-    def clear_values(self, event):
-        self.entry2.delete(first=0, last=50)
-
     def get_values(self, event):
         for entry in self.user_inputs:
-            user_inputs_2(entry.get())
-            print(entry.get())
+            revised_headers.append(entry.get())
         self.myParent.quit()
 
     def close_wind(self, event):
         self.myParent.quit()
-
-
-def user_inputs_2():  # def user_inputs_2(user_inputs)
-    global revised_headers
-    revised_headers.append(user_inputs)
-    return revised_headers
 
 
 if __name__ == "__main__":
@@ -198,25 +158,18 @@ if __name__ == "__main__":
     root.mainloop()
     root.destroy()
 
-
-# ==== TEMP ==== REMOVE '#' ONCE READY TO PASS revised_headers
-# df.columns = revised_headers
-# # remove any trailing spaces
-# df.columns = df.columns.str.strip()
-# # replace spaces " " with an "_"
-# df.columns = df.columns.str.replace(' ', '_')
-# # make all header names uppercase
-# df.columns = df.columns.str.upper()
-# ==== TEMP ====
-
+print()
+print(revised_headers)
+print()
 
 # # ====================================================================================================
-# # CHECK FOR MISSING DATA
+# # CHECK FOR MISSING DATA, ANALYZE MISSING DATA & RETURN UPDATED DF WITH NEW HEADER NAMES
 # # ====================================================================================================
 
 
 def consec_miss_data():
     df = format_data_headers()
+    df.columns = revised_headers
     df_md_ind = pd.DataFrame()
     df_md_ind_results = pd.DataFrame()
 
@@ -250,12 +203,20 @@ def consec_miss_data():
     df_md_ind.drop(['Group', 'Count'], axis=1, inplace=True)
 
     print('CONSECUTIVE MISSING DATA REVIEW COMPLETE')
-    return df_md_ind_results, df_md_ind
-# print(consec_miss_data())
+    return df_md_ind_results, df_md_ind, df
+
+
+print()
+print(consec_miss_data()[2].head())
+print()
+
+# # ====================================================================================================
+# # ANALYZE & SUMMARIZE MISSING DATA FROM MAIN DATA SOURCE
+# # ====================================================================================================
 
 
 def analyze_empty_fields():
-    df = format_data_headers()
+    df = consec_miss_data()[2]
     # find total count cells with missing data
     missing_data_count = df.isnull().sum()
     # create new dataframe for missing data
@@ -271,7 +232,8 @@ def analyze_empty_fields():
     return df_md
 
 
-# print(analyze_empty_fields())
+print(analyze_empty_fields().head())
+print()
 
 
 def merge_df():
@@ -284,22 +246,28 @@ def merge_df():
     return df_md_review
 
 
-# print(merge_df())
+print(merge_df().head())
+print()
+
+# # ====================================================================================================
+# # FILL EMPTY DATA POINTS WITH VALUES FROM PREVIOUS ROW FOR EACH COLUMN
+# # ====================================================================================================
 
 
 def fill_empty_fields():
-    df = format_data_headers()
+    df = consec_miss_data()[2]
     # allowable_missing_data = 20
     # fill in cells with missing data with value from previous row
     df.fillna(axis=0, method='ffill', inplace=True)  # , limit=allowable_missing_data)
-    #TODO: Use average values. Use last known value in any given column and the next
-    #TODO: available value to obtain avg values to fill in gaps with
+    # TODO: Use average values. Use last known value in any given column and the next
+    # TODO: available value to obtain avg values to fill in gaps with
 
     print('EMPTY FIELDS POPULATED')
     return df
 
 
-# print(fill_empty_fields())
+print(fill_empty_fields().head())
+print()
 
 # # ====================================================================================================
 # # EXPORT NEW CSV FILES WITH FORMATTED DATA
@@ -316,7 +284,7 @@ def export_csv():
     df_md_ind.to_csv(csv_file.replace('.csv', '_OUT_Missing_Data_Report.csv'))
 
     print('RESULTS EXPORTED INTO CSV FILES')
-    return df
+    return
 
 
 export_csv()
@@ -325,8 +293,7 @@ export_csv()
 # # >>>END OF SCRIPT<<<
 # # ====================================================================================================
 
-
-print("\n" + ">>>PROCESS COMPLETE!<<<")
+print("\n" + ">>>DATA CLEANING PROCESS COMPLETE!<<<")
 print(">>>TOTAL RUNTIME: %s seconds" % (time.time() - main_start_time).__round__(3))
 
 # alert user upon successful completion
@@ -335,10 +302,8 @@ tk.messagebox.showinfo('Status', 'Data Cleaning Process Complete!')
 # ====================================================================================================
 # >>>END OF DATA CLEANING SCRIPT<<<
 # ====================================================================================================
-# if __name__ == "__main__":
-#     main()
-#
-#
+
+
 #################################################################################################################
 
 
@@ -346,7 +311,6 @@ tk.messagebox.showinfo('Status', 'Data Cleaning Process Complete!')
 # 4.c : Load Profile Generation
 ## Input 
 ## Outputs 
-#howdy
 #################################################################################################################
 
 
@@ -357,25 +321,28 @@ tk.messagebox.showinfo('Status', 'Data Cleaning Process Complete!')
 ## df variable pulled from fill_empty_fields function. Returns clean dataset.
 ## Outputs : EquipmentOutput
 
-LoadProfile = fill_empty_fields() #returns dataframe 'df' values
+LoadProfile = fill_empty_fields()  # returns dataframe 'df' values
 
 # =============================================================================
 # *** User defined inputs ***
 
 Equipment = {'Quantity': 1, 'Size': 200, 'Turndown' : 0.05 }
-# Todo create popup to alot for user input
+# Todo create popup to allow for user input
+
 # =============================================================================
 # Todo : Unmet hours count , so you can after 10 of unmet hours run at turn doen 1 time
+
+
 # *** Defining the calculation Function ***
 def EquipmentDemand(row, Equipment):
     EquipQuantity = Equipment['Quantity']
-    EquipMax = Equipment['Size'] 
+    EquipMax = Equipment['Size']
     EquipTD = Equipment['Turndown']
-    if row['HWLoad'] > EquipMax * EquipTD  : 
+    if row['HWLoad'] > EquipMax * EquipTD  :
         BoilerOut = min ( row['HWLoad'] , EquipMax * EquipQuantity )
     else:
-        BoilerOut = 0 
-        
+        BoilerOut = 0
+
     return BoilerOut
 
 # =============================================================================
@@ -408,7 +375,7 @@ Boiler = {'Efficiency': 0.8, 'Type' : 'Gas' }
 
 # =============================================================================
 # *** Defining the calculation Function ***
- 
+
 def BoilerInput(row , Boiler ):
     BoilerEfficiency = Boiler['Efficiency']
     return row['EquipmentOutput'] * BoilerEfficiency
@@ -422,7 +389,7 @@ BoilerConsumption['BoilerInput'] = EquipmentOutput.apply(BoilerInput, axis = 1 ,
 BoilerAnnualConsumption = BoilerConsumption.sum(axis=0)
 
 BoilerAnnualTherms = BoilerAnnualConsumption/1000
-# Todo: simplify code through the use of dataframes to perform iteration in liue of using .apply method
+# Todo: simplify code through the use of dataframes to perform iteration in lieu of using .apply method
 ##############################################################################
 
 
@@ -452,7 +419,7 @@ n = 6 # we have to find R for numbers 1 through 6 and find the best fit, n anr R
 def ChillerKW (Load_Frame, tons = tons, kws = kws):
     curve_coef = np.polyfit(tons, kws, n)
     chillerkw = np.poly1d(curve_coef)
-    
+
     return chillerkw(Load_Frame)
 
 # need to work on how to call this
@@ -499,7 +466,7 @@ def ChillerKW (Load_Frame, tons = tons, kws = kws):
 def draw_plot(df):
     y_values = df.iloc[:,1]  # Values in the 2nd column will be plotted on the y-axis
     x_values = range(len(y_values))  # x-axis is just a range of the same length as y_values
-    
+
     y_label = df.columns[1]  # Name of 2nd column is y-axis label
     x_label = df.columns[0]  # Name of 1st column is x-axis label
 
@@ -521,4 +488,4 @@ def draw_plot(df):
 ##############################################################################
 # 4.l : Disstribution Energy Consumption
 ## Input 
-## Outputs 
+## Outputs
