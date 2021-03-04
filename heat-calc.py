@@ -287,7 +287,7 @@ def export_csv():
     return
 
 
-export_csv()
+# export_csv()
 
 # # ====================================================================================================
 # # >>>END OF SCRIPT<<<
@@ -311,8 +311,15 @@ tk.messagebox.showinfo('Status', 'Data Cleaning Process Complete!')
 ## Input 
 ## Outputs 
 #################################################################################################################
+# Todo: import script from JH_Calc_HHW
 
 
+def calc_hhw():
+    results = pd.DataFrame()
+    results['TIME'] = df['TIME']
+    results['MBH'] = (500 * (df['CHP_HHWS_TEMP'] - df['CHP_HHWR_TEMP']) * df['CHP_FLOW'] / 1000).__round__(2)
+    results.to_csv(csv_file.replace('.csv', '_OUT_HHW Calc.csv'))
+    return results
 
 #################################################################################################################
 # 4.d : EquipmentDemand Function
@@ -453,6 +460,7 @@ All_energy_data = df
 ####################################
 # Actual Calculation Starts
 #####################################
+# EquipmentDemand() will return BoilerOutput values
 Total_cost = 0
 Demand_charge = 0
 Transmission_charge = 0.01 #Transmission cost should be changed
