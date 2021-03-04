@@ -430,13 +430,52 @@ def ChillerConsumption (Load , curveTons , curveKws ):
 ChilerKwConsumption = pd.DataFrame(ChillerConsumption(Load = Load_CHW , curveTons=tons , curveKws=kws))
 # =============================================================================
 ##############################################################################
-
-
+# 4.g ELECTRIC COST CALCULATOR
 ##############################################################################
 # 4.g : Electric Cost Calculator Function - @aks
-## Input 
-## Outputs
-# Todo: akshay to past in coding from local files
+# import pandas as pd
+# from pandas import ExcelWriter
+# from pandas import ExcelFile
+# import numpy as np
+
+####################################
+# Reading Data from Excel sheet
+####################################
+# Names of files and location needs to be changed
+data = pd.read_excel(r'C:\Work and Everything Else\hello.xlsx') #  Read Exisitng energy usage data
+df = pd.Dataframs(data, columns = ['Energy usage']) # Read Exisitng energy usage data by column
+data1 = pd.read_excel(r'C:Work and Everything Else\hello1.xlsx')  # Reading Hourly rates
+df1 = pd.Dataframs(data1, columns = ['Energy_cost']) # Read hourly rates by the column
+
+Electricity_cost = df1
+All_energy_data = df
+
+####################################
+# Actual Calculation Starts
+#####################################
+Total_cost = 0
+Demand_charge = 0
+Transmission_charge = 0.01 #Transmission cost should be changed
+i = 1
+while i < 8761 : # Next week updates will be adding more inputs from the User to only print/save data needed
+
+    Energy_usage = All_energy_data[(All_energy_data[i])>0]
+    Hourly_rates = Electricity_cost[(Electricity_cost[i]>0)]
+#Calculate energy Cost by the hour
+    Energy_cost[i] = Energy_usage * Hourly_rates
+#Calculate Transmission Cost by the hour
+    Trans_cost[i] = Transmission_charge * Energy_usage
+#Total energy cost for the entire year
+    Total_cost= Total_cost + Trans_cost[i] + Energy_cost[i]
+
+##############################################
+# COST OF ENERGY AND TRANSMISSION COST SAVED TO EXCEL
+##############################################
+
+writer = Excelwriter('C:\Work and Everything Else\FinalCalc.xlsx') # File name and location needs to be changed
+Energy_cost.to_excel(writer, 'Sheet1', index = False)
+Trans_cost.to_excel(writer, 'Sheet2', index = False)
+writer.save()
 ##############################################################################
 
 
