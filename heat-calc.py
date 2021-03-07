@@ -45,7 +45,7 @@ from matplotlib import pyplot as plt
 
 # ====================================================================================================
 # begin tracking overall runtime
-main_start_time = time.time()
+# main_start_time = time.time()
 print("\n" + 'Data cleaning in process...')
 
 # ====================================================================================================
@@ -74,7 +74,7 @@ def read_csv():
     # create dataframe object from csv file
     df = pd.read_csv(filepath_or_buffer=csv_file, header=0, mangle_dupe_cols=True, parse_dates=[0])
 
-    print('READ CSV FILE')
+    # print('READ CSV FILE')
     return df
 
 
@@ -94,12 +94,13 @@ def format_data_headers():
     # make all header names uppercase
     df.columns = df.columns.str.upper()
 
-    print('HEADERS FORMATTED')
-    print()
+    # print('HEADERS FORMATTED')
+    # print()
     return df
 
 
-print(format_data_headers().head())
+# print(format_data_headers().head())
+
 
 # ====================================================================================================
 # UPDATE HEADER NAMES VIA USER INPUT
@@ -158,9 +159,10 @@ if __name__ == "__main__":
     root.mainloop()
     root.destroy()
 
-print()
-print(revised_headers)
-print()
+# print()
+# print(revised_headers)
+# print()
+
 
 # # ====================================================================================================
 # # CHECK FOR MISSING DATA, ANALYZE MISSING DATA & RETURN UPDATED DF WITH NEW HEADER NAMES
@@ -202,13 +204,14 @@ def consec_miss_data():
     df_md_ind.sort_values(by='TIME', ascending=False, inplace=True)
     df_md_ind.drop(['Group', 'Count'], axis=1, inplace=True)
 
-    print('CONSECUTIVE MISSING DATA REVIEW COMPLETE')
+    # print('CONSECUTIVE MISSING DATA REVIEW COMPLETE')
     return df_md_ind_results, df_md_ind, df
 
 
-print()
-print(consec_miss_data()[2].head())
-print()
+# print()
+# print(consec_miss_data()[2].head())
+# print()
+
 
 # # ====================================================================================================
 # # ANALYZE & SUMMARIZE MISSING DATA FROM MAIN DATA SOURCE
@@ -228,12 +231,12 @@ def analyze_empty_fields():
     df_md.reset_index(inplace=True)
     df_md.columns = ['Name', 'Total_Count', '%']
 
-    print('EMPTY FIELDS ANALYZED')
+    # print('EMPTY FIELDS ANALYZED')
     return df_md
 
 
-print(analyze_empty_fields().head())
-print()
+# print(analyze_empty_fields().head())
+# print()
 
 
 def merge_df():
@@ -242,12 +245,13 @@ def merge_df():
     # merge dataframe df_md with df_md_ind_results
     df_md_review = pd.merge(df_md_ind_results, df_md, how='inner')
 
-    print('DATAFRAME MERGE COMPLETE')
+    # print('DATAFRAME MERGE COMPLETE')
     return df_md_review
 
 
-print(merge_df().head())
-print()
+# print(merge_df().head())
+# print()
+
 
 # # ====================================================================================================
 # # FILL EMPTY DATA POINTS WITH VALUES FROM PREVIOUS ROW FOR EACH COLUMN
@@ -262,12 +266,13 @@ def fill_empty_fields():
     # TODO: Use average values. Use last known value in any given column and the next
     #  available value to obtain avg values to fill in gaps with
 
-    print('EMPTY FIELDS POPULATED')
+    # print('EMPTY FIELDS POPULATED')
     return df
 
 
 print(fill_empty_fields().head())
 print()
+
 
 # # ====================================================================================================
 # # EXPORT NEW CSV FILES WITH FORMATTED DATA
@@ -278,6 +283,7 @@ def export_csv():
     df = fill_empty_fields()
     df_md_review = merge_df()
     df_md_ind = consec_miss_data()[1]
+
     # export revised dataframes to new csv file
     df.to_csv(csv_file.replace('.csv', '_OUT_Clean_Data.csv'))
     df_md_review.to_csv(csv_file.replace('.csv', '_OUT_Missing_Data_Summary.csv'))
@@ -293,11 +299,12 @@ def export_csv():
 # # >>>END OF SCRIPT<<<
 # # ====================================================================================================
 
-print("\n" + ">>>DATA CLEANING PROCESS COMPLETE!<<<")
-print(">>>TOTAL RUNTIME: %s seconds" % (time.time() - main_start_time).__round__(3))
+# print("\n" + ">>>DATA CLEANING PROCESS COMPLETE!<<<")
+# print(">>>TOTAL RUNTIME: %s seconds" % (time.time() - main_start_time).__round__(3))
 
 # alert user upon successful completion
 tk.messagebox.showinfo('Status', 'Data Cleaning Process Complete!')
+
 
 # ====================================================================================================
 # >>>END OF DATA CLEANING SCRIPT<<<
@@ -305,21 +312,34 @@ tk.messagebox.showinfo('Status', 'Data Cleaning Process Complete!')
 #################################################################################################################
 
 
-
 #################################################################################################################
 # 4.c : Load Profile Generation
 ## Input 
 ## Outputs 
 #################################################################################################################
-# Todo: import script from JH_Calc_HHW
 
 
 def calc_hhw():
+    df = pd.DataFrame(fill_empty_fields())
     results = pd.DataFrame()
+
     results['TIME'] = df['TIME']
-    results['MBH'] = (500 * (df['CHP_HHWS_TEMP'] - df['CHP_HHWR_TEMP']) * df['CHP_FLOW'] / 1000).__round__(2)
+    results['HHWS_TEMP'] = df['CHP_HHWS_TEMP']
+    results['HHWR_TEMP'] = df['CHP_HHWR_TEMP']
+    results['FLOW'] = df['CHP_FLOW']
+
+    results['MBH'] = (500 * (results['HHWS_TEMP'] - results['HHWR_TEMP'])
+                      * results['FLOW'] / 1000).__round__(2)
     results.to_csv(csv_file.replace('.csv', '_OUT_HHW Calc.csv'))
     return results
+
+
+tk.messagebox.showinfo('Status', 'HHW Calculation complete!')
+
+
+print('RESULTS:')
+print(calc_hhw().head())
+
 
 #################################################################################################################
 # 4.d : EquipmentDemand Function
@@ -328,12 +348,14 @@ def calc_hhw():
 ## df variable pulled from fill_empty_fields function. Returns clean dataset.
 ## Outputs : EquipmentOutput
 
-LoadProfile = fill_empty_fields()  # returns dataframe 'df' values
+LoadProfile = calc_hhw()  # returns dataframe 'df' values
 
 # =============================================================================
 # *** User defined inputs ***
 
-Equipment = {'Quantity': 1, 'Size': 200, 'Turndown' : 0.05 }
+Equipment = {'Quantity': 1, 'Size': 200, 'Turndown': 0.05}
+
+
 # Todo create popup to allow for user input
 
 # =============================================================================
@@ -353,16 +375,17 @@ def EquipmentDemand(row, Equipment):
 
     return BoilerOut
 
+
 # =============================================================================
 # ***How to call this function *** 
 # ***defining the data frames ***
 # temporary input data fram 
-Load_Temp = abs(pd.DataFrame (data = LoadProfile['HWLoad'])) # converting back to Data frame
+Load_Temp = abs(pd.DataFrame(data=LoadProfile['HWLoad']))  # converting back to Data frame
 # Todo: move into data cleaning section of script
 # output data frame
 EquipmentOutput = pd.DataFrame(columns=['EquipmentOutput'])
 # Function Call
-EquipmentOutput['EquipmentOutput'] = Load_Temp.apply(EquipmentDemand, axis = 1, Equipment = Equipment)
+EquipmentOutput['EquipmentOutput'] = Load_Temp.apply(EquipmentDemand, axis=1, Equipment=Equipment)
 # saving to CSV, this can be eliminated
 # EquipmentOutput.to_csv('EquipmentOutput.csv')
 print(EquipmentOutput)
@@ -378,7 +401,9 @@ print(EquipmentOutput)
 # =============================================================================
 # *** User defined inputs ***
 
-Boiler = {'Efficiency': 0.8, 'Type' : 'Gas' }
+Boiler = {'Efficiency': 0.8, 'Type': 'Gas'}
+
+
 # Todo create popup to a lot for user input
 
 # =============================================================================
@@ -387,6 +412,8 @@ Boiler = {'Efficiency': 0.8, 'Type' : 'Gas' }
 def BoilerInput(row, Boiler):
     BoilerEfficiency = Boiler['Efficiency']
     return row['EquipmentOutput'] * BoilerEfficiency
+
+
 # =============================================================================
 # ***How to call this function *** 
 
@@ -396,10 +423,9 @@ BoilerConsumption['BoilerInput'] = EquipmentOutput.apply(BoilerInput, axis=1, Bo
 
 BoilerAnnualConsumption = BoilerConsumption.sum(axis=0)
 
-BoilerAnnualTherms = BoilerAnnualConsumption/1000
+BoilerAnnualTherms = BoilerAnnualConsumption / 1000
 # Todo: simplify code through the use of dataframes to perform iteration in lieu of using .apply method
 ##############################################################################
-
 
 
 ##############################################################################
@@ -411,30 +437,32 @@ BoilerAnnualTherms = BoilerAnnualConsumption/1000
 
 # =============================================================================
 # Here we define the chiller tons and kw s but its user input in future
-tons = np.array([200,180,160,140,120,100,80,60,48])
-kws = np.array([236.10,191.70,157.20,131.20,105.70,80.02,59.81,47.39,41.89])
-n = 6 # need to find R value to optimize this 
+tons = np.array([200, 180, 160, 140, 120, 100, 80, 60, 48])
+kws = np.array([236.10, 191.70, 157.20, 131.20, 105.70, 80.02, 59.81, 47.39, 41.89])
+n = 6  # need to find R value to optimize this
 # =============================================================================
 
 # =============================================================================
 # this should come from other section of code
-Load_CHW = pd.DataFrame([236.1,60,70,66])
+Load_CHW = pd.DataFrame([236.1, 60, 70, 66])
+
 
 # =============================================================================
 # Method 2 : Calculate the polynomial and sending the polynomial out 
-#to do : find the R for the fitted curve 
+# to do : find the R for the fitted curve
 
-def ChillerConsumption (Load , curveTons , curveKws ):
-    def DefineChillerCurve (curveTons , curveKws ): 
-        curve_coef = np.polyfit(tons,kws,n)
+def ChillerConsumption(Load, curveTons, curveKws):
+    def DefineChillerCurve(curveTons, curveKws):
+        curve_coef = np.polyfit(tons, kws, n)
         chillerpoly = np.poly1d(curve_coef)
         return chillerpoly
-    
-    ChillerCurve =  DefineChillerCurve( curveTons , curveKws)
+
+    ChillerCurve = DefineChillerCurve(curveTons, curveKws)
     return ChillerCurve(Load)
 
-#how to call this function 
-ChilerKwConsumption = pd.DataFrame(ChillerConsumption(Load = Load_CHW , curveTons=tons , curveKws=kws))
+
+# how to call this function
+ChilerKwConsumption = pd.DataFrame(ChillerConsumption(Load=Load_CHW, curveTons=tons, curveKws=kws))
 # =============================================================================
 ##############################################################################
 # 4.g ELECTRIC COST CALCULATOR
@@ -449,10 +477,10 @@ ChilerKwConsumption = pd.DataFrame(ChillerConsumption(Load = Load_CHW , curveTon
 # Reading Data from Excel sheet
 ####################################
 # Names of files and location needs to be changed
-data = pd.read_excel(r'C:\Work and Everything Else\hello.xlsx') #  Read Exisitng energy usage data
-df = pd.Dataframs(data, columns = ['Energy usage']) # Read Exisitng energy usage data by column
+data = pd.read_excel(r'C:\Work and Everything Else\hello.xlsx')  # Read Exisitng energy usage data
+df = pd.Dataframs(data, columns=['Energy usage'])  # Read Exisitng energy usage data by column
 data1 = pd.read_excel(r'C:Work and Everything Else\hello1.xlsx')  # Reading Hourly rates
-df1 = pd.Dataframs(data1, columns = ['Energy_cost']) # Read hourly rates by the column
+df1 = pd.Dataframs(data1, columns=['Energy_cost'])  # Read hourly rates by the column
 
 Electricity_cost = df1
 All_energy_data = df
@@ -463,27 +491,29 @@ All_energy_data = df
 # EquipmentDemand() will return BoilerOutput values
 Total_cost = 0
 Demand_charge = 0
-Transmission_charge = 0.01 #Transmission cost should be changed
+Transmission_charge = 0.01  # Transmission cost should be changed
 i = 1
-while i < 8761 : # Next week updates will be adding more inputs from the User to only print/save data needed
+while i < 8761:  # Next week updates will be adding more inputs from the User to only print/save data needed
 
-    Energy_usage = All_energy_data[(All_energy_data[i])>0]
-    Hourly_rates = Electricity_cost[(Electricity_cost[i]>0)]
-#Calculate energy Cost by the hour
+    Energy_usage = All_energy_data[(All_energy_data[i]) > 0]
+    Hourly_rates = Electricity_cost[(Electricity_cost[i] > 0)]
+    # Calculate energy Cost by the hour
     Energy_cost[i] = Energy_usage * Hourly_rates
-#Calculate Transmission Cost by the hour
+    # Calculate Transmission Cost by the hour
     Trans_cost[i] = Transmission_charge * Energy_usage
-#Total energy cost for the entire year
-    Total_cost= Total_cost + Trans_cost[i] + Energy_cost[i]
+    # Total energy cost for the entire year
+    Total_cost = Total_cost + Trans_cost[i] + Energy_cost[i]
 
 ##############################################
 # COST OF ENERGY AND TRANSMISSION COST SAVED TO EXCEL
 ##############################################
 
-writer = Excelwriter('C:\Work and Everything Else\FinalCalc.xlsx') # File name and location needs to be changed
-Energy_cost.to_excel(writer, 'Sheet1', index = False)
-Trans_cost.to_excel(writer, 'Sheet2', index = False)
+writer = Excelwriter('C:\Work and Everything Else\FinalCalc.xlsx')  # File name and location needs to be changed
+Energy_cost.to_excel(writer, 'Sheet1', index=False)
+Trans_cost.to_excel(writer, 'Sheet2', index=False)
 writer.save()
+
+
 ##############################################################################
 
 
@@ -513,7 +543,8 @@ writer.save()
 #
 ##############################################################################
 def plot_x(df):
-    print("\nHere's a preview of the data you're trying to plot:\n") #show a preview of the data passed to the function
+    print(
+        "\nHere's a preview of the data you're trying to plot:\n")  # show a preview of the data passed to the function
     print(df.head())
 
     x_values = df.iloc[:, 0]  # Values in the 1st column will be plotted on the x-axis
@@ -522,15 +553,15 @@ def plot_x(df):
     x_label = df.columns[0]  # Name of 1st column is x-axis label
     y_label = df.columns[1]  # Name of 2nd column is y-axis label
 
-    print("\nx-values are of type: ", type(x_values[1])) #print data types to the console
+    print("\nx-values are of type: ", type(x_values[1]))  # print data types to the console
     print("y-values are of type: ", type(y_values[1]))
 
-    #do a quick check that the data is plottable (i.e. not a string - this could be more robust)
+    # do a quick check that the data is plottable (i.e. not a string - this could be more robust)
     if (type(x_values[1]) == str) or (type(y_values[1]) == str):
         print("\nERROR: Please make sure you are plotting numerical data.\n")
         return
 
-    #make the plot
+    # make the plot
     print('\nData looks good. Ready to plot. Here we gooooooooo!!!!!\n')
     fig, ax = plt.subplots()  # Create a figure containing a single axes.
     ax.set_title(str(y_label) + ' vs. ' + str(x_label))  # set the title
@@ -539,7 +570,6 @@ def plot_x(df):
     ax.plot(x_values, y_values, lw=0.1)  # Plot the data
     plt.show()  # show the plot
     return
-
 
 ##############################################################################
 # 4.l : Disstribution Energy Consumption
