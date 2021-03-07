@@ -120,6 +120,9 @@ class UserInputsApp:
         self.myContainer2 = tk.Frame(parent, relief=tk.FLAT, borderwidth=4, *args, **kwargs)
         self.myContainer2.grid(padx=5, pady=5)
 
+        self.label_entry1 = tk.Label(self.myContainer1, text="SAMPLE NAME:", font=font)
+        self.label_entry1.grid(row=2, column=0, sticky='nsew')
+
         self.label_entry2 = tk.Label(self.myContainer1, text="[ BLDG ] _ [ EQUP TYPE ] _ [ EQUP NO. ] _ [ SYS ]",
                                      width=41, font=font)
         self.label_entry2.grid(row=2, column=1, sticky='nsew')
@@ -345,7 +348,7 @@ print(calc_hhw().head())
 # 4.d : EquipmentDemand Function
 ## Libraries : Pandas as pd 
 ## Input : LoadProfile, data_path, Equipment
-## df variable pulled from fill_empty_fields function. Returns clean dataset.
+## df variable pulled from calc_hhw function. Returns clean dataset.
 ## Outputs : EquipmentOutput
 
 LoadProfile = calc_hhw()  # returns dataframe 'df' values
