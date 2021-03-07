@@ -42,6 +42,9 @@ def plot_time(df):
     y_values = df.iloc[:,1]  # Values in the 2nd column will be plotted on the y-axis
     x_values = range(len(y_values))  # x-axis is just a range of the same length as y_values
 
+    x_ticks = [x*796.364 for x in range(12)]    # create x ticks corresponding to months
+    months = ['J','F','M','A','M','J','J','A','S','O','N','D']  # list of months
+
     y_label = df.columns[1]  # Name of 2nd column is y-axis label
     x_label = df.columns[0]  # Name of 1st column is x-axis label
 
@@ -49,6 +52,8 @@ def plot_time(df):
     ax.set_title(y_label + ' vs. ' + x_label)  # set the title
     ax.set_xlabel(x_label)  # label the x-axis
     ax.set_ylabel(y_label)  # label the y-axis
+    ax.set_xticks(x_ticks)  # set and label x-ticks
+    ax.set_xticklabels(months)
     ax.plot(x_values, y_values, lw=0.1)  # Plot the data
     plt.show()  # show the plot
     return
