@@ -155,15 +155,6 @@ def plot_x(df):
 
     fig = px.scatter(x=x_values, y=y_values, labels=xy_labels, title=y_label + ' vs. ' + x_label)  # plot using plotly
     fig.show()
-
-    # # make the plot
-    # print('\nData looks good. Ready to plot. Here we gooooooooo!!!!!\n')
-    # fig, ax = plt.subplots()  # Create a figure containing a single axes.
-    # ax.set_title(str(y_label) + ' vs. ' + str(x_label))  # set the title
-    # ax.set_xlabel(x_label)  # label the x-axis
-    # ax.set_ylabel(y_label)  # label the y-axis
-    # ax.plot(x_values, y_values, lw=0.1)  # Plot the data
-    # plt.show()  # show the plot
     return
 
 # MATPLOTLIB VERSION - STABLE
