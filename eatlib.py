@@ -79,7 +79,6 @@ def plot_time(df):
 
     y_values = df.iloc[:,1] # values in the 2nd column will be plotted on the y-axis
     x_values = df.iloc[:,0] # timestamps on the x-axis
-    # x_values = range(len(y_values))  # x-axis is just a range of the same length as y_values
 
     y_label = df.columns[1] # name of 2nd column is y-axis label
     x_label = df.columns[0] # name of 1st column is x-axis label
@@ -151,8 +150,7 @@ def plot_x(df):
     y_label = df.columns[1]  # Name of 2nd column is y-axis label
     xy_labels = {'x': x_label, 'y': y_label}    # create a dictionary of the labels to pass to px.line
 
-    # do a quick check that the data is plottable (i.e. not a string - this could be more robust)
-    if (type(x_values[1]) == str) or (type(y_values[1]) == str):
+    if (type(x_values[1]) == str) or (type(y_values[1]) == str):    # do a quick check that the data is plottable (i.e. not a string - this could be more robust)
         print("\nERROR: Please make sure you are plotting numerical data.\n")
         return
 
