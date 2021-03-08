@@ -16,15 +16,15 @@ from eatlib import * # import eatlib - the only library you'll ever need
 # SCRIPT
 
 # 1: call plot_time function from eatlib - STABLE
-# root = '/Users/maxsun/EAT' # define path to sample data
-#
-# df = pd.read_csv(root + '/EquipmentOutput.csv') # read data into a DataFrame and print some info
-# print('\nDATA READ SUCCESSFULLY...\n')
-#
-# print('calling plot_time function...')
-# plot_time(df) #call a function from eatlib to plot the data
+root = '/Users/maxsun/EAT' # define path to sample data
 
-# 1: call plot_time function from eatlib - STABLE
+df = pd.read_csv(root + '/EquipmentOutput.csv') # read data into a DataFrame and print some info
+print('\nDATA READ SUCCESSFULLY...\n')
+
+print('calling plot_time function...')
+plot_time(df) #call a function from eatlib to plot the data
+
+# 2: call plot_x function from eatlib - STABLE
 df = pd.DataFrame(np.random.randn(100, 4), columns=list('ABCD'))
 print('\nDATAFRAME CREATED...\n')
 
