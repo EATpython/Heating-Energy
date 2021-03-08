@@ -12,7 +12,7 @@
 import pandas as pd
 import plotly.express as px
 import datetime
-# import numpy as np
+import numpy as np
 # import warnings
 # import time
 # import matplotlib.pyplot as plt
@@ -20,7 +20,7 @@ import datetime
 # from tkinter import filedialog
 # from tkinter import messagebox
 # from scipy.optimize import curve_fit
-# from matplotlib import pyplot as plt
+from matplotlib import pyplot as plt
 
 
 
@@ -91,6 +91,7 @@ def plot_time(df):
 
 # MATPLOTLIB VERSION - STABLE
 # def plot_time(df):
+#     # import pandas as pd
 #     # from matplotlib import pyplot as plt
 #
 #     y_values = df.iloc[:,1]  # Values in the 2nd column will be plotted on the y-axis
@@ -117,45 +118,85 @@ def plot_time(df):
 #####################################################
 # plot_x(df) - variable vs. variable plotting function
 #
+#   Imports:
+#
+#   import pandas as pd
+#   import plotly.express as px (IF USING PLOTLY)
+#   from matplotlib import pyplot as plt (IF USING MATPLOTLIB)
+#
+#
 #   Inputs:
 #
 #   df - 'nx2' pandas DataFrame object with x-values in the first column & y-values in the second column.
+#
 #
 #   Outputs:
 #
 #   No outputs. This function just draws a plot. We could change it so it returns a matplotlib object (figure or axes) and then use that to plot later.
 #
+#
 #   TODO:
 #
 #   -convert this to plotly
 #
+#
+# PLOTLY VERSION - STABLE
 def plot_x(df):
-    print(
-        "\nHere's a preview of the data you're trying to plot:\n")  # show a preview of the data passed to the function
-    print(df.head())
+    # import pandas as pd
+    # import plotly.express as px
+    # import datetime
+    print("\n HERE'S A PREVIEW OF THE DATA YOU'RE PLOTTING:")  # show a preview of the data passed to the function
+    print(df)   # print some information about the data being plotted
+    print()
+    print(df.dtypes)
 
     x_values = df.iloc[:, 0]  # Values in the 1st column will be plotted on the x-axis
     y_values = df.iloc[:, 1]  # Values in the 2nd column will be plotted on the y-axis
 
     x_label = df.columns[0]  # Name of 1st column is x-axis label
     y_label = df.columns[1]  # Name of 2nd column is y-axis label
-
-    print("\nx-values are of type: ", type(x_values[1]))  # print data types to the console
-    print("y-values are of type: ", type(y_values[1]))
+    xy_labels = {'x': x_label, 'y': y_label}    # create a dictionary of the labels to pass to px.line
 
     # do a quick check that the data is plottable (i.e. not a string - this could be more robust)
     if (type(x_values[1]) == str) or (type(y_values[1]) == str):
         print("\nERROR: Please make sure you are plotting numerical data.\n")
         return
 
-    # make the plot
-    print('\nData looks good. Ready to plot. Here we gooooooooo!!!!!\n')
-    fig, ax = plt.subplots()  # Create a figure containing a single axes.
-    ax.set_title(str(y_label) + ' vs. ' + str(x_label))  # set the title
-    ax.set_xlabel(x_label)  # label the x-axis
-    ax.set_ylabel(y_label)  # label the y-axis
-    ax.plot(x_values, y_values, lw=0.1)  # Plot the data
-    plt.show()  # show the plot
+    fig = px.scatter(x=x_values, y=y_values, labels=xy_labels, title=y_label + ' vs. ' + x_label)  # plot using plotly
+    fig.show()
+
+    # # make the plot
+    # print('\nData looks good. Ready to plot. Here we gooooooooo!!!!!\n')
+    # fig, ax = plt.subplots()  # Create a figure containing a single axes.
+    # ax.set_title(str(y_label) + ' vs. ' + str(x_label))  # set the title
+    # ax.set_xlabel(x_label)  # label the x-axis
+    # ax.set_ylabel(y_label)  # label the y-axis
+    # ax.plot(x_values, y_values, lw=0.1)  # Plot the data
+    # plt.show()  # show the plot
     return
 
+# MATPLOTLIB VERSION - STABLE
+# def plot_x(df):
+#     # import pandas as pd
+#     # from matplotlib import pyplot as plt
+#
+#     print("\n HERE'S A PREVIEW OF THE DATA YOU'RE PLOTTING:")  # show a preview of the data passed to the function
+#     print(df)   # print some information about the data being plotted
+#     print()
+#     print(df.dtypes)
+#
+#     x_values = df.iloc[:, 0]  # Values in the 1st column will be plotted on the x-axis
+#     y_values = df.iloc[:, 1]  # Values in the 2nd column will be plotted on the y-axis
+#
+#     x_label = df.columns[0]  # Name of 1st column is x-axis label
+#     y_label = df.columns[1]  # Name of 2nd column is y-axis labelxy_labels = {'x': x_label, 'y': y_label}    # create a dictionary of the labels to pass to px.line
+#
+#     # make the plot
+#     fig, ax = plt.subplots()  # Create a figure containing a single axes.
+#     ax.set_title(str(y_label) + ' vs. ' + str(x_label))  # set the title
+#     ax.set_xlabel(x_label)  # label the x-axis
+#     ax.set_ylabel(y_label)  # label the y-axis
+#     ax.plot(x_values, y_values, lw=0.1)  # Plot the data
+#     plt.show()  # show the plot
+#     return
 ##############################################################################
