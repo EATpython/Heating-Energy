@@ -97,7 +97,7 @@ def plot_time(df):
 #####################################################
 
 
-
+#####################################################
 # plot_x(df) - variable vs. variable plotting function
 #
 #   Inputs:
@@ -142,6 +142,3 @@ def plot_x(df):
     return
 
 ##############################################################################
-# 4.l : Disstribution Energy Consumption
-## Input
-## Outputs
