@@ -34,8 +34,8 @@ import datetime
 #
 #   Imports:
 #
-#   pandas ad pd
-#   from matplotlib import pyplot as plt
+#   import pandas as pd
+#   import plotly.express as px
 #
 #   Inputs:
 #
@@ -54,6 +54,9 @@ import datetime
 #
 # PLOTLY VERSION - STABLE
 def plot_time(df):
+    # import pandas as pd
+    # import plotly.express as px
+
     pd.options.plotting.backend = "plotly"  # activate Plotly backend
     print('PLOTLY BACKEND ACTIVATED')
 
@@ -70,6 +73,8 @@ def plot_time(df):
 
 # MATPLOTLIB VERSION - STABLE
 # def plot_time(df):
+#     # from matplotlib import pyplot as plt
+#
 #     y_values = df.iloc[:,1]  # Values in the 2nd column will be plotted on the y-axis
 #     x_values = range(len(y_values))  # x-axis is just a range of the same length as y_values
 #
