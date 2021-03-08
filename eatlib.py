@@ -134,12 +134,6 @@ def plot_time(df):
 #
 #   No outputs. This function just draws a plot. We could change it so it returns a matplotlib object (figure or axes) and then use that to plot later.
 #
-#
-#   TODO:
-#
-#   -convert this to plotly
-#
-#
 # PLOTLY VERSION - STABLE
 def plot_x(df):
     # import pandas as pd
