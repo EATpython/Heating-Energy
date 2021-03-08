@@ -35,7 +35,8 @@ import datetime
 #   Imports:
 #
 #   import pandas as pd
-#   import plotly.express as px
+#   import plotly.express as px (IF USING PLOTLY)
+#   from matplotlib import pyplot as plt (IF USING MATPLOTLIB)
 #
 #   Inputs:
 #
