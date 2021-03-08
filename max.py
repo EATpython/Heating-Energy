@@ -15,17 +15,14 @@ from eatlib import * # import eatlib - the only library you'll ever need
 ####################################################################################################################
 # SCRIPT
 
-# 001 - call plot_time function from eatlib - STABLE
+# 1: call plot_time function from eatlib - STABLE
 root = '/Users/maxsun/EAT' # define path to sample data
 
 df = pd.read_csv(root + '/EquipmentOutput.csv') # read data into a DataFrame and print some info
 print('\nDATA READ SUCCESSFULLY:\n')
-print(df)
-print()
-print(df.dtypes)
 
+print('calling plot_time function...')
 plot_time(df) #call a function from eatlib to plot the data
-
 
 
 

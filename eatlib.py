@@ -35,8 +35,10 @@ import datetime
 #   Imports:
 #
 #   import pandas as pd
+#   import datetime
 #   import plotly.express as px (IF USING PLOTLY)
 #   from matplotlib import pyplot as plt (IF USING MATPLOTLIB)
+#
 #
 #   Inputs:
 #
@@ -57,12 +59,26 @@ import datetime
 def plot_time(df):
     # import pandas as pd
     # import plotly.express as px
+    # import datetime
+    print('\nPLOT_TIME FUNCTION ACTIVATED') # let the user know this function has been called
 
     pd.options.plotting.backend = "plotly"  # activate Plotly backend
-    print('PLOTLY BACKEND ACTIVATED')
+    print('plotly backend activated...')
 
-    y_values = df.iloc[:,1]  # Values in the 2nd column will be plotted on the y-axis
-    x_values = range(len(y_values))  # x-axis is just a range of the same length as y_values
+    print("\n HERE'S A PREVIEW OF THE DATA YOU'RE PLOTTING:")
+    print(df)   # print some information about the data being plotted
+    print()
+    print(df.dtypes)
+
+    print('\nconverting timestamp data...')  # convert timestamps to datetime64 objects
+    timestamp = pd.to_datetime(df.iloc[:, 0])
+    print('TIMESTAMP DATA CONVERTED FROM', type(df.iloc[0, 0]), 'TO', type(timestamp[0]))
+    df.iloc[:, 0] = timestamp
+    print(df.iloc[:, 0].head())
+
+    y_values = df.iloc[:,1] # values in the 2nd column will be plotted on the y-axis
+    x_values = df.iloc[:,0] # timestamps on the x-axis
+    # x_values = range(len(y_values))  # x-axis is just a range of the same length as y_values
 
     y_label = df.columns[1] # name of 2nd column is y-axis label
     x_label = df.columns[0] # name of 1st column is x-axis label
@@ -110,8 +126,8 @@ def plot_time(df):
 #
 #   TODO:
 #
-#   -Make more flexible/robust
-#   -If it's always going to be 8760 data, we can work on making the x-axis prettier with month names
+#   -convert this to plotly
+#
 def plot_x(df):
     print(
         "\nHere's a preview of the data you're trying to plot:\n")  # show a preview of the data passed to the function
