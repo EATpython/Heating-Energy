@@ -11,6 +11,7 @@
 
 import pandas as pd
 import plotly.express as px
+import plotly.graph_objects as go
 import datetime
 import numpy as np
 # import warnings
@@ -36,7 +37,7 @@ from matplotlib import pyplot as plt
 #
 #   import pandas as pd
 #   import datetime
-#   import plotly.express as px (IF USING PLOTLY)
+#   import plotly.graph_objects as go (IF USING PLOTLY)
 #   from matplotlib import pyplot as plt (IF USING MATPLOTLIB)
 #
 #
@@ -55,38 +56,68 @@ from matplotlib import pyplot as plt
 #   -Make more flexible/robust
 #   -If it's always going to be 8760 data, we can work on making the x-axis prettier with month names
 #
-# PLOTLY VERSION - STABLE
+# PLOTLY.GRAPH_OBJECTS VERSION - STABLE
 def plot_time(df):
     # import pandas as pd
-    # import plotly.express as px
+    # import plotly.graph_objects as go
     # import datetime
     print('\nPLOT_TIME FUNCTION ACTIVATED') # let the user know this function has been called
 
-    pd.options.plotting.backend = "plotly"  # activate Plotly backend
-    print('plotly backend activated...')
-
-    print("\n HERE'S A PREVIEW OF THE DATA YOU'RE PLOTTING:")
-    print(df)   # print some information about the data being plotted
+    print("\n HERE'S A PREVIEW OF THE DATA YOU'RE PLOTTING:")   # print some information about the data being plotted
+    print(df)
     print()
     print(df.dtypes)
 
     print('\nconverting timestamp data...')  # convert timestamps to datetime64 objects
-    timestamp = pd.to_datetime(df.iloc[:, 0])
-    print('TIMESTAMP DATA CONVERTED FROM', type(df.iloc[0, 0]), 'TO', type(timestamp[0]))
-    df.iloc[:, 0] = timestamp
+    timestamps = pd.to_datetime(df.iloc[:, 0])
+    print('TIMESTAMP DATA CONVERTED FROM', type(df.iloc[0, 0]), 'TO', type(timestamps[0]))
+    df.iloc[:, 0] = timestamps
     print(df.iloc[:, 0].head())
 
-    y_values = df.iloc[:,1] # values in the 2nd column will be plotted on the y-axis
-    x_values = df.iloc[:,0] # timestamps on the x-axis
+    fig = go.Figure()   # use graph_objects to create the figure
 
-    y_label = df.columns[1] # name of 2nd column is y-axis label
-    x_label = df.columns[0] # name of 1st column is x-axis label
-    xy_labels = {'x': x_label, 'y': y_label}    # create a dictionary of the labels to pass to px.line
+    for i in range(df.shape[1] - 1):    # create traces for each column vs. time
+        fig.add_trace(go.Scatter(x=timestamps, y=df.iloc[:, i + 1],
+                                 visible='legendonly',
+                                 mode='lines',
+                                 name=df.columns[i + 1]))
 
-    fig = px.line(x=x_values, y=y_values, labels=xy_labels, title=y_label + ' vs. ' + x_label)  # plot using plotly
+    fig.update_layout(showlegend=True  )    # force the legend for single-trace plots
     fig.show()
     return
-
+#
+# # PLOTLY.EXPRESS VERSION - STABLE
+# def plot_time(df):
+#     # import pandas as pd
+#     # import plotly.express as px
+#     # import datetime
+#     print('\nPLOT_TIME FUNCTION ACTIVATED') # let the user know this function has been called
+#
+#     pd.options.plotting.backend = "plotly"  # activate Plotly backend
+#     print('plotly backend activated...')
+#
+#     print("\n HERE'S A PREVIEW OF THE DATA YOU'RE PLOTTING:")
+#     print(df)   # print some information about the data being plotted
+#     print()
+#     print(df.dtypes)
+#
+#     print('\nconverting timestamp data...')  # convert timestamps to datetime64 objects
+#     timestamp = pd.to_datetime(df.iloc[:, 0])
+#     print('TIMESTAMP DATA CONVERTED FROM', type(df.iloc[0, 0]), 'TO', type(timestamp[0]))
+#     df.iloc[:, 0] = timestamp
+#     print(df.iloc[:, 0].head())
+#
+#     y_values = df.iloc[:,1] # values in the 2nd column will be plotted on the y-axis
+#     x_values = df.iloc[:,0] # timestamps on the x-axis
+#
+#     y_label = df.columns[1] # name of 2nd column is y-axis label
+#     x_label = df.columns[0] # name of 1st column is x-axis label
+#     xy_labels = {'x': x_label, 'y': y_label}    # create a dictionary of the labels to pass to px.line
+#
+#     fig = px.line(x=x_values, y=y_values, labels=xy_labels, title=y_label + ' vs. ' + x_label)  # plot using plotly
+#     fig.show()
+#     return
+#
 # MATPLOTLIB VERSION - STABLE
 # def plot_time(df):
 #     # import pandas as pd
@@ -155,7 +186,7 @@ def plot_x(df):
     fig = px.scatter(x=x_values, y=y_values, labels=xy_labels, title=y_label + ' vs. ' + x_label, trendline="ols")  # plot using plotly
     fig.show()
     return
-
+#
 # MATPLOTLIB VERSION - STABLE
 # def plot_x(df):
 #     # import pandas as pd
