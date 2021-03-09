@@ -136,7 +136,6 @@ def plot_time(df):
 def plot_x(df):
     # import pandas as pd
     # import plotly.express as px
-    # import datetime
     print("\n HERE'S A PREVIEW OF THE DATA YOU'RE PLOTTING:")  # show a preview of the data passed to the function
     print(df)   # print some information about the data being plotted
     print()
@@ -153,7 +152,7 @@ def plot_x(df):
         print("\nERROR: Please make sure you are plotting numerical data.\n")
         return
 
-    fig = px.scatter(x=x_values, y=y_values, labels=xy_labels, title=y_label + ' vs. ' + x_label)  # plot using plotly
+    fig = px.scatter(x=x_values, y=y_values, labels=xy_labels, title=y_label + ' vs. ' + x_label, trendline="ols")  # plot using plotly
     fig.show()
     return
 

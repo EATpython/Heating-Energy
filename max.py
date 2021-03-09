@@ -15,17 +15,17 @@ from eatlib import * # import eatlib - the only library you'll ever need
 ####################################################################################################################
 # SCRIPT
 
-# 1: call plot_time function from eatlib - STABLE
-root = '/Users/maxsun/EAT' # define path to sample data
-
-df = pd.read_csv(root + '/EquipmentOutput.csv') # read data into a DataFrame and print some info
-print('\nDATA READ SUCCESSFULLY...\n')
-
-print('calling plot_time function...')
-plot_time(df) #call a function from eatlib to plot the data
+# # 1: call plot_time function from eatlib - STABLE
+# root = '/Users/maxsun/EAT' # define path to sample data
+#
+# df = pd.read_csv(root + '/EquipmentOutput.csv') # read data into a DataFrame and print some info
+# print('\nDATA READ SUCCESSFULLY...\n')
+#
+# print('calling plot_time function...')
+# plot_time(df) #call a function from eatlib to plot the data
 
 # 2: call plot_x function from eatlib - STABLE
-df = pd.DataFrame(np.random.randn(100, 4), columns=list('ABCD'))
+df = pd.DataFrame(np.random.randn(100, 2), columns=list('AB'))
 print('\nDATAFRAME CREATED...\n')
 
 print('calling plot_x function...')
@@ -35,6 +35,13 @@ plot_x(df) #call a function from eatlib to plot the data
 
 ####################################################################################################################
 # SANDBOX
+
+# 6: use Plotly Express to create entire figures at once. RECOMMENDED APPROACH
+# import plotly.express as px
+#
+# df = px.data.tips()
+# fig = px.scatter(df, x="total_bill", y="tip", trendline="ols")
+# fig.show()
 
 # 6: use Plotly Express to create entire figures at once. RECOMMENDED APPROACH
 # import pandas as pd
