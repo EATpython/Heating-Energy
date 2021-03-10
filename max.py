@@ -15,7 +15,7 @@ from eatlib import * # import eatlib - the only library you'll ever need
 ####################################################################################################################
 # SCRIPT
 
- # 1: call plot_time function from eatlib - STABLE
+# # 1: call plot_time function from eatlib - STABLE
 # root = '/Users/maxsun/EAT' # define path to sample data
 #
 # df = pd.read_csv(root + '/EquipmentOutput.csv') # read data into a DataFrame and print some info
@@ -23,7 +23,7 @@ from eatlib import * # import eatlib - the only library you'll ever need
 #
 # print('calling plot_time function...')
 # plot_time(df) #call a function from eatlib to plot the data
-
+#
 # # 2: call plot_x function from eatlib - STABLE
 # df = pd.DataFrame(np.random.randn(100, 4), columns=list('ABCD'))
 # df = df.abs()
@@ -32,23 +32,36 @@ from eatlib import * # import eatlib - the only library you'll ever need
 #
 # print('calling plot_x function...')
 # plot_x(df) #call a function from eatlib to plot the data
-
+#
 # 3: plot clean EAT data using plot_time - STABLE
-root = './DataCleaner Output Files' # use output files from JH_CSV_DataCleaner
+root = './DataCleaner Output Files/' # use output files from JH_CSV_DataCleaner
+file_name = '2019 CHP Raw Trend_OUT_Clean_Data'
+filepath_out = './Plots/'
 
-df = pd.read_csv(root + '/2019 CHP Raw Trend_OUT_Clean_Data.csv') # read data into a DataFrame and print some info
+df = pd.read_csv(root + file_name+ '.csv') # read data into a DataFrame and print some info
 print('\nDATA READ SUCCESSFULLY...\n')
 print(df)
 
 df.drop(df.columns[0],axis=1,inplace=True) # !!! drop the first column of data so timestamps are in column 0
 print(df)
 print('calling plot_time function...')
-plot_time(df) #call a function from eatlib to plot the data
-
+fig = plot_time(df) #call a function from eatlib to plot the data
+fig.write_html(filepath_out + file_name + '_Plot.html')   # write the plot to html so it's shareable
+fig.show()
 
 
 ####################################################################################################################
 # SANDBOX
+
+# 8: test plot_time function on Salk EBS1 data
+# root = '/Users/maxsun/EAT' # define path to sample data
+#
+# df = pd.read_csv(root + '/CWRF EBS August and September 2020.csv') # read data into a DataFrame and print some info
+# print('\nDATA READ SUCCESSFULLY...\n')
+# print(df)
+#
+# print('calling plot_time function...')
+# plot_time(df) #call a function from eatlib to plot the data
 
 # 7: test multiple line plot
 # import plotly.graph_objects as go

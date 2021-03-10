@@ -81,10 +81,16 @@ def plot_time(df):
                                  visible='legendonly',
                                  mode='lines',
                                  name=df.columns[i + 1]))
+        #TODO add label for max value
+        # fig.add_annotation(x=2, y=5,
+        #                    text="Text annotation with arrow",
+        #                    showarrow=True,
+        #                    arrowhead=1)
 
-    fig.update_layout(showlegend=True  )    # force the legend for single-trace plots
-    fig.show()
-    return
+    fig.update_layout(showlegend=True)    # force the legend for single-trace plots
+    # fig.write_html("plot.html")   # write the plot to html so it's shareable
+    # fig.show()    # changed this to return a fig instead of plotting. can change back if we want.
+    return fig
 #
 # # PLOTLY.EXPRESS VERSION - STABLE
 # def plot_time(df):
