@@ -63,20 +63,24 @@ def plot_time(df):
     # import datetime
     print('\nPLOT_TIME FUNCTION ACTIVATED') # let the user know this function has been called
 
-    print("\n HERE'S A PREVIEW OF THE DATA YOU'RE PLOTTING:")   # print some information about the data being plotted
+    # print some information about the data being plotted
+    print("\n HERE'S A PREVIEW OF THE DATA YOU'RE PLOTTING:")
     print(df)
     print()
     print(df.dtypes)
 
-    print('\nconverting timestamp data...')  # convert timestamps to datetime64 objects
+    # convert timestamps to datetime64 objects
+    print('\nconverting timestamp data...')
     timestamps = pd.to_datetime(df.iloc[:, 0])
     print('TIMESTAMP DATA CONVERTED FROM', type(df.iloc[0, 0]), 'TO', type(timestamps[0]))
     df.iloc[:, 0] = timestamps
     print(df.iloc[:, 0].head())
 
-    fig = go.Figure()   # use graph_objects to create the figure
+    # use graph_objects to create the figure
+    fig = go.Figure()
 
-    for i in range(df.shape[1] - 1):    # create traces for each column vs. time
+    # create traces for each column vs. time
+    for i in range(df.shape[1] - 1):
         fig.add_trace(go.Scatter(x=timestamps, y=df.iloc[:, i + 1],
                                  visible='legendonly',
                                  mode='lines',
