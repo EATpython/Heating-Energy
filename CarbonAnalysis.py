@@ -1,31 +1,33 @@
-import pandas as pd
+import pandas as pd # Comment out once merged into "heat-calc.py" file
 
 # Calculating total time
-df = pd.read_csv('2019 CHP Raw Trend.csv')
+df = pd.read_csv('2019 CHP Raw Trend.csv') # Comment out once merged into "heat-calc.py" file
 time = df['Time'].astype('datetime64[ns]')
 print("Oldest date is ", time.min())
 print("Latest date is ", time.max())
 delta_time = (time.max() - time.min()).days
 print('Number of days is', delta_time)
 
-# Calculating total therms
+# Calculating total therms - Tara/Jonathan already calculated this value, revise to reference
 HHWST = df['CHP HHWS Temp']
 HHWRT = df['CHP HHWR Temp']
 CHPF = df['CHP Flow']
-therm = (HHWST-HHWRT)*CHPF*.005
-total_therm = therm.sum()
-print('Total therms is ', total_therm)
+BoilerMBH = (HHWST - HHWRT) * CHPF / 1000 / .85 # Assuming 85% efficiency, placeholder for user input
+total_BoilerMBH = BoilerMBH.sum()
+print('Total MBH from data is ', total_BoilerMBH)
+# Include kWh usage and convert to MBH (1,000 Btu)
 
-# Normalizing therm to represent 1 year (365 days)
-annual_therm = (total_therm / delta_time) * 365
 
-# Location in SoCalGas territory, use EIA data: Emission factor = 53.07 kgCO2/MMBtu, MMBtu = 10 therm; #
+# Normalizing usage to represent 1 year (365 days)
+annual_therm = (total_BoilerMBH / delta_time) * 365
+
+# Location in SoCalGas territory, use EIA data: Emission factor = 53.07 kgCO2/MMBtu, MMBtu = 10 BoilerMBH
 # Source: https://www.eia.gov/environment/emissions/co2_vol_mass.php
 # https://www.socalgas.com/regulatory/documents/a-16-12-010/SCG-CIP-Rebuttal-Testimony-A1612010-2017-11-03%20Final.pdf
-# Location not in SoCalGas territory, use Energy Star data: Emission factor = 53.11 kgCO2/MMBtu, MMBtu = 10 therm
+# Location not in SoCalGas territory, use Energy Star data: Emission factor = 53.11 kgCO2/MMBtu, MMBtu = 10 BoilerMBH
 # https://portfoliomanager.energystar.gov/pdf/reference/Emissions.pdf
 
 # Calculating emissions
-emission_factor = 53.07  # kgCO2/MMBtu, where MMBtu = 1,000,000 Btu = 10 therm
+emission_factor = 53.07  # kgCO2/MMBtu, where MMBtu = 1,000,000 Btu = 10 BoilerMBH
 carbon_emission = annual_therm * emission_factor * 10
-print('Amount of CO2 emitted per year is ', carbon_emission, ' kgCO2/MMBtu.')
+print('Amount of CO2 emitted per year is', carbon_emission, 'kg.')
