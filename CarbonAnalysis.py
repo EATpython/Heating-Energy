@@ -3,26 +3,19 @@
 # NOT WORKING - calculating the therms from data (need to skip first row)
 import pandas as pd
 
-## input will be boiler output data
-df = pd.read_csv(r'input.csv') # Update file name and references within that file
-df['Start'] = df['Start'].astype('datetime64[ns]')
-df['End'] = df['End'].astype('datetime64[ns]')
+df = pd.read_csv('2019 CHP Raw Trend.csv')
+time = df['Time'].astype('datetime64[ns]')
+# print(time)
+print("Oldest date is ", time.min())
+print("Latest date is ", time.max())
+delta_time = time.max() - time.min()
+print(delta_time)
 
-latest = df.End.max()
-oldest = df.Start.min()
-delta_days = (df.Start.max() - df.End.min()).days
 
-print("Latest date: ", latest)
-print("Oldest date:", oldest)
-print("Number of days between:", delta_days)
+# DOES NOT WORK - Calculating therms from HHWST, HHWRT, and Flow
+therm = df[('CHP HHWS Temp' - 'CHP HHWR Temp')*'CHP Flow'*.005]
+print(therm.sum())
 
-# DOES NOT WORK - Calculating total usage from "Usage" column.
-therm = pd.read_csv(r'input.csv')
-next(therm)  # <-- troubleshoot here; meant to skip first row (header) before iterating
-total = 0
-for row in therm:
-   total += float(row[2])
-   print("Total usage within billing period is ", total," therms")
 
 
 # Calculations - normalize (therm/day), then typical annual usage (therm/year); need to fix above section
