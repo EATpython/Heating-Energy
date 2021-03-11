@@ -1,5 +1,4 @@
 # WORKING - Finding latest, oldest, and delta between dates from data set
-# Update to reference the raw data file being used and references to the data via headers
 # NOT WORKING - calculating the therms from data (need to skip first row)
 import pandas as pd
 
@@ -8,21 +7,19 @@ time = df['Time'].astype('datetime64[ns]')
 # print(time)
 print("Oldest date is ", time.min())
 print("Latest date is ", time.max())
-delta_time = time.max() - time.min()
-print(delta_time)
-
+delta_time = (time.max() - time.min()).days
+print('Number of days is', delta_time)
 
 # DOES NOT WORK - Calculating therms from HHWST, HHWRT, and Flow
-therm = df[('CHP HHWS Temp' - 'CHP HHWR Temp')*'CHP Flow'*.005]
-print(therm.sum())
+
+HHWST = df['CHP HHWS Temp']
+HHWRT = df['CHP HHWR Temp']
+CHPF = df['CHP Flow']
+therm = (HHWST-HHWRT)*CHPF*.005
+total_therm = therm.sum # Need to sum series
+print(total_therm)
 
 
-
-# Calculations - normalize (therm/day), then typical annual usage (therm/year); need to fix above section
-therm_per_day = total / delta_days
-annual_therm = therm_per_day * 365
-print(therm_per_day)
-print(annual_therm)
 
 # Location in SoCalGas territory, use EIA data: Emission factor = 53.07 kgCO2/MMBtu, MMBtu = 10 therm; #
 # Source: https://www.eia.gov/environment/emissions/co2_vol_mass.php
