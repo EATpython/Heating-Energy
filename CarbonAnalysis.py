@@ -27,7 +27,7 @@ import pandas as pd # Comment out once merged into "heat-calc.py" file
 # https://portfoliomanager.energystar.gov/pdf/reference/Emissions.pdf
 
 BoilerAnnualTherms = 500 # variable from 4.e : Boiler Consumption Function, 5000 is placeholder
-ChillerKwConsumption = 250000 # variable from 4.f : Chiller Consumption Function, 250000 is placeholder
+ChillerKwConsumption = 250000 # variable from 4.f : Chiller Consumption Function, 250000 is placeholder; use .sum() if dataframe
 
 # Calculating emissions
 emission_factor = 53.07  # kgCO2/MMBtu, where MMBtu = 1,000,000 Btu = 10 therms;  1 kWh = 3412.14 Btu
