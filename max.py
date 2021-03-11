@@ -15,16 +15,24 @@ from eatlib import * # import eatlib - the only library you'll ever need
 ####################################################################################################################
 # SCRIPT
 
-# # 1: call plot_time function from eatlib - STABLE
-# root = '/Users/maxsun/EAT' # define path to sample data
+# 1: call plot_time function from eatlib - STABLE
+# filepath_in = '/Users/maxsun/EAT/' # use output files from JH_CSV_DataCleaner
+# filepath_out = './Plots/'   # where the plot gets saved
+# file_name = 'EquipmentOutput' #name of the file w/o .csv suffix (used to conveniently name plots, but maybe not robust)
 #
-# df = pd.read_csv(root + '/EquipmentOutput.csv') # read data into a DataFrame and print some info
+# df = pd.read_csv(filepath_in + file_name + '.csv') # read data into a DataFrame and print some info
 # print('\nDATA READ SUCCESSFULLY...\n')
+# print(df)
 #
+# # call a function from eatlib to plot the data
 # print('calling plot_time function...')
-# plot_time(df) #call a function from eatlib to plot the data
-#
-# # 2: call plot_x function from eatlib - STABLE
+# fig = plot_time(df)
+# fig.write_html(filepath_out + file_name + '_Plot.html')   # write the plot to html so it's shareable
+# fig.show()
+
+
+
+# 2: call plot_x function from eatlib - STABLE
 # df = pd.DataFrame(np.random.randn(100, 4), columns=list('ABCD'))
 # df = df.abs()
 # print('\nDATAFRAME CREATED...\n')
@@ -32,22 +40,29 @@ from eatlib import * # import eatlib - the only library you'll ever need
 #
 # print('calling plot_x function...')
 # plot_x(df) #call a function from eatlib to plot the data
-#
-# 3: plot clean EAT data using plot_time - STABLE
-root = './DataCleaner Output Files/' # use output files from JH_CSV_DataCleaner
-file_name = '2019 CHP Raw Trend_OUT_Clean_Data'
-filepath_out = './Plots/'
 
-df = pd.read_csv(root + file_name+ '.csv') # read data into a DataFrame and print some info
+
+
+# 3: plot clean EAT data using plot_time - STABLE
+
+# define paths and filenames
+filepath_in = './DataCleaner Output Files/' # use output files from JH_CSV_DataCleaner
+filepath_out = './Plots/'   # where the plot gets saved
+file_name = '2019 CHP Raw Trend_OUT_Clean_Data' #name of the file w/o .csv suffix (used to conveniently name plots, but maybe not robust)
+
+df = pd.read_csv(filepath_in + file_name + '.csv') # read data into a DataFrame and print some info
 print('\nDATA READ SUCCESSFULLY...\n')
 print(df)
 
-df.drop(df.columns[0],axis=1,inplace=True) # !!! drop the first column of data so timestamps are in column 0
-print(df)
+# !!! drop the first column of data so timestamps are in column
+df.drop(df.columns[0],axis=1,inplace=True)
+
+# call a function from eatlib to plot the data
 print('calling plot_time function...')
-fig = plot_time(df) #call a function from eatlib to plot the data
+fig = plot_time(df)
 fig.write_html(filepath_out + file_name + '_Plot.html')   # write the plot to html so it's shareable
 fig.show()
+
 
 
 ####################################################################################################################
@@ -62,6 +77,8 @@ fig.show()
 #
 # print('calling plot_time function...')
 # plot_time(df) #call a function from eatlib to plot the data
+
+
 
 # 7: test multiple line plot
 # import plotly.graph_objects as go

@@ -54,7 +54,7 @@ from matplotlib import pyplot as plt
 #   TODO:
 #
 #   -Make more flexible/robust
-#   -If it's always going to be 8760 data, we can work on making the x-axis prettier with month names
+#   -Show interpolated data in a different color
 #
 # PLOTLY.GRAPH_OBJECTS VERSION - STABLE
 def plot_time(df):
@@ -88,7 +88,6 @@ def plot_time(df):
         #                    arrowhead=1)
 
     fig.update_layout(showlegend=True)    # force the legend for single-trace plots
-    # fig.write_html("plot.html")   # write the plot to html so it's shareable
     # fig.show()    # changed this to return a fig instead of plotting. can change back if we want.
     return fig
 #
