@@ -114,6 +114,7 @@ class UserInputsApp:
         self.user_inputs = []
         self.bldg_prefix = ""
         self.myParent = parent
+
         self.myContainer1 = tk.Frame(parent, relief=tk.SUNKEN, borderwidth=4, *args, **kwargs)
         self.myContainer1.grid(padx=5, pady=5)
 
@@ -322,10 +323,11 @@ tk.messagebox.showinfo('Status', 'Data Cleaning Process Complete!')
 #################################################################################################################
 
 
-def calc_hhw():
+def calc_bldg_load_mbh():
     df = pd.DataFrame(fill_empty_fields())
     results = pd.DataFrame()
 
+    # Todo: establish standard naming scheme for header labels
     results['TIME'] = df['TIME']
     results['HHWS_TEMP'] = df['CHP_HHWS_TEMP']
     results['HHWR_TEMP'] = df['CHP_HHWR_TEMP']
@@ -341,24 +343,22 @@ tk.messagebox.showinfo('Status', 'HHW Calculation complete!')
 
 
 print('RESULTS:')
-print(calc_hhw().head())
+print(calc_bldg_load_mbh().head())
 
 
 #################################################################################################################
 # 4.d : EquipmentDemand Function
-## Libraries : Pandas as pd 
+## Libraries : Pandas as pd
 ## Input : LoadProfile, data_path, Equipment
-## df variable pulled from calc_hhw function. Returns clean dataset.
+## df variable pulled from calc_bldg_load_mbh function. Returns clean dataset.
 ## Outputs : EquipmentOutput
 
-LoadProfile = calc_hhw()  # returns dataframe 'df' values
+LoadProfile = calc_bldg_load_mbh()  # returns dataframe 'df' values
 
 # =============================================================================
 # *** User defined inputs ***
 
 Equipment = {'Quantity': 1, 'Size': 200, 'Turndown': 0.05}
-
-
 # Todo create popup to allow for user input
 
 # =============================================================================
@@ -371,8 +371,8 @@ def EquipmentDemand(row, Equipment):
     EquipMax = Equipment['Size']
     EquipTD = Equipment['Turndown']
 
-    if row['HWLoad'] > EquipMax * EquipTD:
-        BoilerOut = min(row['HWLoad'], EquipMax * EquipQuantity)
+    if row['MBH'] > EquipMax * EquipTD:
+        BoilerOut = min(row['MBH'], EquipMax * EquipQuantity)
     else:
         BoilerOut = 0
 
@@ -380,10 +380,10 @@ def EquipmentDemand(row, Equipment):
 
 
 # =============================================================================
-# ***How to call this function *** 
+# ***How to call this function ***
 # ***defining the data frames ***
-# temporary input data fram 
-Load_Temp = abs(pd.DataFrame(data=LoadProfile['HWLoad']))  # converting back to Data frame
+# temporary input data fram
+Load_Temp = abs(pd.DataFrame(data=LoadProfile['MBH']))  # converting back to Data frame
 # Todo: move into data cleaning section of script
 # output data frame
 EquipmentOutput = pd.DataFrame(columns=['EquipmentOutput'])
@@ -391,22 +391,21 @@ EquipmentOutput = pd.DataFrame(columns=['EquipmentOutput'])
 EquipmentOutput['EquipmentOutput'] = Load_Temp.apply(EquipmentDemand, axis=1, Equipment=Equipment)
 # saving to CSV, this can be eliminated
 # EquipmentOutput.to_csv('EquipmentOutput.csv')
+print()
 print(EquipmentOutput)
 #################################################################################################################
 
 
 #################################################################################################################
-# 4.e : Boiler Consumption Function 
-## Libraries : Pandas as pd 
-## Input DataPath, EquipmentOutput, Boiler 
-## Outputs BoilerConsumption 
+# 4.e : Boiler Consumption Function
+## Libraries : Pandas as pd
+## Input DataPath, EquipmentOutput, Boiler
+## Outputs BoilerConsumption
 
 # =============================================================================
 # *** User defined inputs ***
 
 Boiler = {'Efficiency': 0.8, 'Type': 'Gas'}
-
-
 # Todo create popup to a lot for user input
 
 # =============================================================================
@@ -418,7 +417,7 @@ def BoilerInput(row, Boiler):
 
 
 # =============================================================================
-# ***How to call this function *** 
+# ***How to call this function ***
 
 BoilerConsumption = pd.DataFrame(columns=['BoilerInput'])
 
@@ -432,9 +431,9 @@ BoilerAnnualTherms = BoilerAnnualConsumption / 1000
 
 
 ##############################################################################
-# 4.f : Chiller Consumption Function 
-## Libraries : Pandas as pd, numpy as np, from scipy.optimize import curve_fit 
-## Input : ChillerPerformance ( tons and kw) and Load.CHWwhihc i called Load_CHW 
+# 4.f : Chiller Consumption Function
+## Libraries : Pandas as pd, numpy as np, from scipy.optimize import curve_fit
+## Input : ChillerPerformance ( tons and kw) and Load.CHWwhihc i called Load_CHW
 ## Outputs R, ChillerKw
 # =============================================================================
 
@@ -451,7 +450,7 @@ Load_CHW = pd.DataFrame([236.1, 60, 70, 66])
 
 
 # =============================================================================
-# Method 2 : Calculate the polynomial and sending the polynomial out 
+# Method 2 : Calculate the polynomial and sending the polynomial out
 # to do : find the R for the fitted curve
 
 def ChillerConsumption(Load, curveTons, curveKws):
@@ -476,6 +475,8 @@ ChilerKwConsumption = pd.DataFrame(ChillerConsumption(Load=Load_CHW, curveTons=t
 # from pandas import ExcelFile
 # import numpy as np
 
+# kw data imported fro Tara's section
+
 Energycost = fill_empty_fields()
 Energyusage = EquipmentDemand()
 Energycost= pd.DataFrame(columns=['Costofenergy'])
@@ -496,7 +497,7 @@ def Energycalc(Energycost,Energy_usage):
     Total_cost = TransmissionCost + Totalenergycost
     # Saving to CSV
     Total_cost.to_csv('TotalCost.csv')
-    
+
     return Total_cost
 ####################################
 # End of Fucntion
@@ -510,16 +511,16 @@ print(Energycalc)
 
 
 ##############################################################################
-# 4.h: Gas Cost Calculator FUnction 
-## Input 
-## Outputs 
+# 4.h: Gas Cost Calculator FUnction
+## Input
+## Outputs
 ##############################################################################
 
 
 ##############################################################################
 # 4.i : Carbon Calculator Function - @ate
-## Input 
-## Outputs 
+## Input
+## Outputs
 ##############################################################################
 
 ##############################################################################
@@ -528,7 +529,7 @@ print(Energycalc)
 #
 #   df - a pandas DataFrame object with timestamps in the first column & some variable of interest in the second column.
 #
-## Outputs 
+## Outputs
 #
 #   No outputs. This function just draws a plot. We could change it so it returns a matplotlib object (figure or axes) and then use that to plot later.
 #
@@ -594,5 +595,5 @@ def plot_x(df):
 
 ##############################################################################
 # 4.l : Disstribution Energy Consumption
-## Input 
+## Input
 ## Outputs
