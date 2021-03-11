@@ -476,47 +476,36 @@ ChilerKwConsumption = pd.DataFrame(ChillerConsumption(Load=Load_CHW, curveTons=t
 # from pandas import ExcelFile
 # import numpy as np
 
-####################################
-# Reading Data from Excel sheet
-####################################
-# Names of files and location needs to be changed
-data = pd.read_excel(r'C:\Work and Everything Else\hello.xlsx')  # Read Exisitng energy usage data
-df = pd.Dataframs(data, columns=['Energy usage'])  # Read Exisitng energy usage data by column
-data1 = pd.read_excel(r'C:Work and Everything Else\hello1.xlsx')  # Reading Hourly rates
-df1 = pd.Dataframs(data1, columns=['Energy_cost'])  # Read hourly rates by the column
-
-Electricity_cost = df1
-All_energy_data = df
+Energycost = fill_empty_fields()
+Energyusage = EquipmentDemand()
+Energycost= pd.DataFrame(columns=['Costofenergy'])
 
 ####################################
-# Actual Calculation Starts
+# Calculation inside the fuction
 #####################################
-# EquipmentDemand() will return BoilerOutput values
-Total_cost = 0
-Demand_charge = 0
-Transmission_charge = 0.01  # Transmission cost should be changed
-i = 1
-while i < 8761:  # Next week updates will be adding more inputs from the User to only print/save data needed
+def Energycalc(Energycost,Energy_usage):
 
-    Energy_usage = All_energy_data[(All_energy_data[i]) > 0]
-    Hourly_rates = Electricity_cost[(Electricity_cost[i] > 0)]
-    # Calculate energy Cost by the hour
-    Energy_cost[i] = Energy_usage * Hourly_rates
-    # Calculate Transmission Cost by the hour
-    Trans_cost[i] = Transmission_charge * Energy_usage
-    # Total energy cost for the entire year
-    Total_cost = Total_cost + Trans_cost[i] + Energy_cost[i]
+    TEnergy_usage = Energy_usage['Kwh']
+    Cost = Energycost['Cost']
+    #Calculate energy Cost by the hour
+    Totalenergycost = Energy_usage * Cost
+    #Calculate Transmission Cost by the hour
+    Transmission_charge = 0.01 # should be modified by the user
+    TransmissionCost = Energy_usage * Transmission_charge
+    #Total energy cost to the user each hour
+    Total_cost = TransmissionCost + Totalenergycost
+    # Saving to CSV
+    Total_cost.to_csv('TotalCost.csv')
+    
+    return Total_cost
+####################################
+# End of Fucntion
+#####################################
 
-##############################################
-# COST OF ENERGY AND TRANSMISSION COST SAVED TO EXCEL
-##############################################
+#calling the function
+Energycalc['TotalCost'] = Load_Temp.apply(Energycost, axis=1, Energy_usage=Energyusage)
 
-writer = Excelwriter('C:\Work and Everything Else\FinalCalc.xlsx')  # File name and location needs to be changed
-Energy_cost.to_excel(writer, 'Sheet1', index=False)
-Trans_cost.to_excel(writer, 'Sheet2', index=False)
-writer.save()
-
-
+print(Energycalc)
 ##############################################################################
 
 
