@@ -31,8 +31,8 @@ from eatlib import * # import eatlib - the only library you'll ever need
 # fig.show()
 
 
-
-# 2: call plot_x function from eatlib - STABLE
+#
+# # 2: call plot_x function from eatlib - STABLE
 # df = pd.DataFrame(np.random.randn(100, 4), columns=list('ABCD'))
 # df = df.abs()
 # print('\nDATAFRAME CREATED...\n')
