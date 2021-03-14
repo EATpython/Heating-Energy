@@ -36,7 +36,7 @@ from matplotlib import pyplot as plt
 ###########################################################################
 # PLOTTING FUNCTIONS:
 
-test
+testing
 
 #####################################################
 # plot_time(df) - variable vs. time plotting function
