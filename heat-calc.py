@@ -185,22 +185,21 @@ def consec_miss_data():
     header_count = len(df.columns)
 
     while counter < header_count:
-        for i in header_main:
-            lst_temp = []
-            df_temp = df.copy()
+        lst_temp = []
+        df_temp = df.copy()
 
-            df_temp['Group'] = df_temp[header_main[counter]].notnull().astype(int).cumsum()
-            df_temp = df_temp[df_temp[header_main[counter]].isnull()]
+        df_temp['Group'] = df_temp[header_main[counter]].notnull().astype(int).cumsum()
+        df_temp = df_temp[df_temp[header_main[counter]].isnull()]
 
-            df_temp = df_temp[df_temp['Group'].isin(df_temp['Group'].value_counts().index)]
-            df_temp['Count'] = df_temp.groupby('Group')['Group'].transform('size')
+        df_temp = df_temp[df_temp['Group'].isin(df_temp['Group'].value_counts().index)]
+        df_temp['Count'] = df_temp.groupby('Group')['Group'].transform('size')
 
-            max_value = df_temp['Count'].max()
-            df_md_ind = df_md_ind.append(df_temp)
+        max_value = df_temp['Count'].max()
+        df_md_ind = df_md_ind.append(df_temp)
 
-            lst_temp.append([header_main[counter], str(max_value)])
-            df_md_ind_results = df_md_ind_results.append(lst_temp)
-            counter += 1
+        lst_temp.append([header_main[counter], str(max_value)])
+        df_md_ind_results = df_md_ind_results.append(lst_temp)
+        counter += 1
 
     df_md_ind_results.columns = ['Name', 'Long_Count']
     df_md_ind_results.reset_index(drop=True, inplace=True)
