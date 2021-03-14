@@ -268,7 +268,7 @@ def fill_empty_fields():
     df.interpolate(axis=0, method="linear", inplace=True)
 
     # print('EMPTY FIELDS POPULATED')
-    return df
+    return df.round(2)
 
 
 print(fill_empty_fields().head())
