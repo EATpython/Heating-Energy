@@ -264,11 +264,8 @@ def merge_df():
 
 def fill_empty_fields():
     df = consec_miss_data()[2]
-    # allowable_missing_data = 20
-    # fill in cells with missing data with value from previous row
-    df.fillna(axis=0, method='ffill', inplace=True)  # , limit=allowable_missing_data)
-    # TODO: Use average values. Use last known value in any given column and the next
-    #  available value to obtain avg values to fill in gaps with
+    # fill in empty cells through linear interpolation
+    df.interpolate(axis=0, method="linear", inplace=True)
 
     # print('EMPTY FIELDS POPULATED')
     return df
