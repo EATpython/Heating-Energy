@@ -110,7 +110,7 @@ def format_data_headers():
 class UserInputsApp:
     def __init__(self, parent, *args, **kwargs):
         df = format_data_headers()
-        header_lst = [item + ':' for item in df.columns]
+        header_lst = df.columns
         self.user_inputs = []
         self.bldg_prefix = ""
         self.myParent = parent
@@ -132,7 +132,8 @@ class UserInputsApp:
             self.label2 = tk.Label(self.myContainer1, text=text, width=25, font=font)
             self.label2.grid(row=idx + 3, column=0, sticky='e')
 
-            self.entry2 = tk.Entry(self.myContainer1, width=40)
+            self.preset = tk.StringVar(root, value=text)
+            self.entry2 = tk.Entry(self.myContainer1, width=40, textvariable=self.preset)
             self.entry2.grid(row=idx + 3, column=1, sticky='nsew')
             self.user_inputs.append(self.entry2)
 
