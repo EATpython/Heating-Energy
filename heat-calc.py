@@ -473,7 +473,6 @@ ChilerKwConsumption = pd.DataFrame(ChillerConsumption(Load=Load_CHW, curveTons=t
 # import numpy as np
 
 # kw data imported fro Tara's section
-
 Energycost = fill_empty_fields()
 Energyusage = EquipmentDemand()
 Energycost= pd.DataFrame(columns=['Costofenergy'])
@@ -483,19 +482,88 @@ Energycost= pd.DataFrame(columns=['Costofenergy'])
 #####################################
 def Energycalc(Energycost,Energy_usage):
 
-    TEnergy_usage = Energy_usage['Kwh']
-    Cost = Energycost['Cost']
-    #Calculate energy Cost by the hour
-    Totalenergycost = Energy_usage * Cost
-    #Calculate Transmission Cost by the hour
-    Transmission_charge = 0.01 # should be modified by the user
-    TransmissionCost = Energy_usage * Transmission_charge
-    #Total energy cost to the user each hour
-    Total_cost = TransmissionCost + Totalenergycost
-    # Saving to CSV
-    Total_cost.to_csv('TotalCost.csv')
+    Currentmonth = 1
+    #month1= begining of summer and month2 = end of summer
+    Time=0
+    If (Currentmonth < month1 or currentmonth > month2):
+        {
+        ################################
+        #Winter Calculation
+        ################################
+        switch(Energycost,Energy_usage,Time):
+           {
+            case 1: Time <= Energycost['superbase1'];
+                Totalenergycost = Energy_usage * Energycost['superbase1'];
+                Transmission_charge = 0.01 ; # should be modified by the user
+                TransmissionCost = Energy_usage * Transmission_charge;
+                Total_cost = TransmissionCost + Totalenergycost;
+                # Saving to CSV
+                Total_cost.to_csv('TotalCost.csv');
+                Time = Time+1;
+                 break;
 
+            case 2: Time > Energycost['superbase1'] and Time <= Energycost['base']; #Code will run with base, super base, peak and super peak all with same values
+                Totalenergycost = Energy_usage * Energycost['base']
+                Transmission_charge = 0.01  # should be modified by the user
+                TransmissionCost = Energy_usage * Transmission_charge
+                Total_cost = TransmissionCost + Totalenergycost
+                # Saving to CSV
+                Total_cost.to_csv('TotalCost.csv')
+                Time = Time + 1
+                break;
+
+            case 3: Time > base and Time<= peak;
+                Totalenergycost = Energy_usage * Energycost['peak'];
+                Transmission_charge = 0.01 ; # should be modified by the user
+                TransmissionCost = Energy_usage * Transmission_charge;
+                Total_cost = TransmissionCost + Totalenergycost;
+                # Saving to CSV
+                Total_cost.to_csv('TotalCost.csv');
+                Time=Time+1;
+                break;
+           }
+        else  {
+                 ################################
+                 #Summer calculation
+                 ################################
+               switch(Energycost,Energy_usage,Time):
+           {
+            case 1: Time <= Energycost['SUMsuperbase'];
+                Totalenergycost = Energy_usage * Energycost['SUMsuperbase'];
+                Transmission_charge = 0.01 ; # should be modified by the user
+                TransmissionCost = Energy_usage * Transmission_charge;
+                Total_cost = TransmissionCost + Totalenergycost;
+                # Saving to CSV
+                Total_cost.to_csv('TotalCost.csv');
+                Time = Time+1;
+                 break;
+
+            case 2: Time > Energycost['SUMsuperbase'] and Time <= Energycost['SUMbase']; #Code will run with base, super base, peak and super peak all with same values
+                Totalenergycost = Energy_usage * Energycost['SUMbase']
+                Transmission_charge = 0.01  # should be modified by the user
+                TransmissionCost = Energy_usage * Transmission_charge
+                Total_cost = TransmissionCost + Totalenergycost
+                # Saving to CSV
+                Total_cost.to_csv('TotalCost.csv')
+                Time = Time + 1
+                break;
+
+            case 3: Time > base and Time<= peak;
+                Totalenergycost = Energy_usage * Energycost['SUMpeak'];
+                Transmission_charge = 0.01 ; # should be modified by the user
+                TransmissionCost = Energy_usage * Transmission_charge;
+                Total_cost = TransmissionCost + Totalenergycost;
+                # Saving to CSV
+                Total_cost.to_csv('TotalCost.csv');
+                Time=Time+1;
+                break;
+
+            }
+
+
+        }
     return Total_cost
+
 ####################################
 # End of Fucntion
 #####################################
