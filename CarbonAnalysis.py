@@ -35,7 +35,7 @@ ChillerKwConsumption = 250000 # variable from 4.f : Chiller Consumption Function
 # Calculating emissions - create a function "carbon_calculator"
 emission_factor_kwh = 53.07 * 3.41214 / 1000  # kgCO2/MMBtu, where MMBtu = 1,000,000 Btu = 10 therms;  1 kWh = 3412.14 Btu
 emission_factor_therm = 5.307
-# change emission_factor to user input from excel
+# change emission_factor_kwh and emission factor_therm to user input from excel
 co2_gas = BoilerAnnualTherms * emission_factor_therm
 co2_elec = ChillerKwConsumption * emission_factor_kwh
 total_carbon = (co2_elec + co2_gas).__round__(1)
