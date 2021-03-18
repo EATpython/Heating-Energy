@@ -2,7 +2,7 @@
 #
 # eatlib - Energy Automation Team (EAT) Library
 #
-# this is a library of functions to be used in EAT scripts
+# this is a library of functions and classes to be used in EAT scripts
 
 
 
@@ -229,3 +229,10 @@ def plot_x(df):
 #     plt.show()  # show the plot
 #     return
 ##############################################################################
+
+
+
+####################################################################################################################
+# CLASSES:
+
+# class
