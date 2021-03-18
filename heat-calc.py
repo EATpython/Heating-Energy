@@ -461,7 +461,7 @@ def ChillerConsumption(Load, curveTons, curveKws):
 
 
 # how to call this function
-ChilerKwConsumption = pd.DataFrame(ChillerConsumption(Load=Load_CHW, curveTons=tons, curveKws=kws))
+ChillerKwConsumption = pd.DataFrame(ChillerConsumption(Load=Load_CHW, curveTons=tons, curveKws=kws))
 # =============================================================================
 ##############################################################################
 # 4.g ELECTRIC COST CALCULATOR

@@ -1,6 +1,8 @@
 import pandas as pd # Comment out once merged into "heat-calc.py" file
 
-# # Calculating total time
+
+# ======
+# # Calculating total time - create function "data_normalization"
 # df = pd.read_csv('2019 CHP Raw Trend.csv') # Comment out once merged into "heat-calc.py" file
 # time = df['Time'].astype('datetime64[ns]')
 # print("Oldest date is ", time.min())
@@ -19,6 +21,7 @@ import pandas as pd # Comment out once merged into "heat-calc.py" file
 #
 # # Normalizing usage to represent 1 year (365 days)
 # annual_therm = (total_BoilerMBH / delta_time) * 365
+# ======
 
 # Location in SoCalGas territory, use EIA data: Emission factor = 53.07 kgCO2/MMBtu, MMBtu = 10 BoilerMBH
 # Source: https://www.eia.gov/environment/emissions/co2_vol_mass.php
@@ -29,9 +32,11 @@ import pandas as pd # Comment out once merged into "heat-calc.py" file
 BoilerAnnualTherms = 500 # variable from 4.e : Boiler Consumption Function, 5000 is placeholder
 ChillerKwConsumption = 250000 # variable from 4.f : Chiller Consumption Function, 250000 is placeholder; use .sum() if dataframe
 
-# Calculating emissions
-emission_factor = 53.07  # kgCO2/MMBtu, where MMBtu = 1,000,000 Btu = 10 therms;  1 kWh = 3412.14 Btu
-co2_gas = BoilerAnnualTherms * emission_factor / 10
-co2_elec = ChillerKwConsumption * emission_factor * 3412.14 / 1000000
+# Calculating emissions - create a function "carbon_calculator"
+emission_factor_kwh = 53.07 * 3.41214 / 1000  # kgCO2/MMBtu, where MMBtu = 1,000,000 Btu = 10 therms;  1 kWh = 3412.14 Btu
+emission_factor_therm = 5.307
+# change emission_factor to user input from excel
+co2_gas = BoilerAnnualTherms * emission_factor_therm
+co2_elec = ChillerKwConsumption * emission_factor_kwh
 total_carbon = (co2_elec + co2_gas).__round__(1)
 print('Amount of CO2 emitted per year is', total_carbon, 'kg or', (total_carbon*2.204).__round__(1),'lbs')
