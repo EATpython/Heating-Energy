@@ -379,7 +379,7 @@ def EquipmentDemand(row, Equipment):
 # =============================================================================
 # ***How to call this function ***
 # ***defining the data frames ***
-# temporary input data fram
+# temporary input data frame
 Load_Temp = abs(pd.DataFrame(data=LoadProfile['MBH']))  # converting back to Data frame
 # Todo: move into data cleaning section of script
 # output data frame

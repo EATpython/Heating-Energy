@@ -2,7 +2,7 @@
 # Source: https://www.eia.gov/environment/emissions/co2_vol_mass.php
 # Source: https://www.eia.gov/tools/faqs/faq.php?id=74&t=11
 
-import pandas as pd  # Comment out once merged into "heat-calc.py" file
+import pandas as pd  # Comment out once merged into "_P2S_EAT_LIBRARY.py" file
 
 BoilerAnnualTherms = 500  # variable from 4.e : Boiler Consumption Function, 5000 is placeholder
 ChillerKwConsumption = 250000  # variable from 4.f : Chiller Consumption Function, 250000 is placeholder; use .sum() if dataframe
