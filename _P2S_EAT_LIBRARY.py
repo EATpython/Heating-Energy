@@ -286,9 +286,9 @@ def export_csv():
     df_md_ind = consec_miss_data()[1]
 
     # export revised dataframes to new csv file
-    df.to_csv(csv_file.replace('.csv', '_OUT_Clean_Data.csv'))
-    df_md_review.to_csv(csv_file.replace('.csv', '_OUT_Missing_Data_Summary.csv'))
-    df_md_ind.to_csv(csv_file.replace('.csv', '_OUT_Missing_Data_Report.csv'))
+    df.to_csv(csv_file.replace('.csv', '_OUT_1_Clean_Data.csv'))
+    df_md_review.to_csv(csv_file.replace('.csv', '_OUT_2_Missing_Data_Summary.csv'))
+    df_md_ind.to_csv(csv_file.replace('.csv', '_OUT_3_Missing_Data_Report.csv'))
 
     print('RESULTS EXPORTED INTO CSV FILES')
     return
@@ -332,7 +332,7 @@ def calc_bldg_load_mbh():
 
     results['MBH'] = (500 * (results['HHWS_TEMP'] - results['HHWR_TEMP'])
                       * results['FLOW'] / 1000).__round__(2)
-    results.to_csv(csv_file.replace('.csv', '_OUT_HHW Calc.csv'))
+    results.to_csv(csv_file.replace('.csv', '_OUT_0_HHW Calc.csv'))
     return results
 
 
