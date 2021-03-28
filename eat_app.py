@@ -10,35 +10,26 @@
 from eatlib import * # import eatlib - the only library you'll ever need
 
 
+
 ####################################################################################################################
 # SCRIPT
 
-st.title('Trend Data Visualization')
+# plot clean EAT data using plot_time - STABLE
+# define paths and filenames
+filepath_in = './DataCleaner Output Files/' # use output files from JH_CSV_DataCleaner
+# filepath_out = './Plots/'   # where the plot gets saved
+file_name = '2019 CHP Raw Trend_OUT_Clean_Data' #name of the file w/o .csv suffix (used to conveniently name plots, but maybe not robust)
 
-DATE_COLUMN = 'date/time'
-DATA_URL = ('https://s3-us-west-2.amazonaws.com/'
-         'streamlit-demo-data/uber-raw-data-sep14.csv.gz')
+df = pd.read_csv(filepath_in + file_name + '.csv') # read data into a DataFrame and print some info
+print('\nDATA READ SUCCESSFULLY...\n')
+print(df)
 
-@st.cache
-def load_data(nrows):
-    data = pd.read_csv(DATA_URL, nrows=nrows)
-    lowercase = lambda x: str(x).lower()
-    data.rename(lowercase, axis='columns', inplace=True)
-    data[DATE_COLUMN] = pd.to_datetime(data[DATE_COLUMN])
-    return data
+# !!! drop the first column of data so timestamps are in column
+df.drop(df.columns[0],axis=1,inplace=True)
 
-# Create a text element and let the reader know the data is loading.
-data_load_state = st.text('Loading data...')
-# Load 10,000 rows of data into the dataframe.
-data = load_data(10000)
-# Notify the reader that the data was successfully loaded.
-data_load_state.text("Done! (using st.cache)")
-
-st.subheader('Raw data')
-st.write(data)
-
-st.subheader('Number of pickups by hour')
-hist_values = np.histogram(
-    data[DATE_COLUMN].dt.hour, bins=24, range=(0,24))[0]
-
-st.bar_chart(hist_values)
+# call a function from eatlib to plot the data
+print('calling plot_time function...')
+fig = plot_time(df)
+# fig.write_html(filepath_out + file_name + '_Plot.html')   # write the plot to html so it's shareable
+# fig.show()
+st.plotly_chart(fig, use_container_width=True)

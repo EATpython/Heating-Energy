@@ -1,0 +1,7 @@
+altair
+pandas
+streamlit
+plotly.express
+datetime
+numpy
+matplotlib
