@@ -33,4 +33,4 @@ fig = plot_time(df)
 # fig.write_html(filepath_out + file_name + '_Plot.html')   # write the plot to html so it's shareable
 # fig.show()
 st.plotly_chart(fig, use_container_width=True)
-# st.title('Trend Data Visualization')
+st.title('Trend Data Visualization')
