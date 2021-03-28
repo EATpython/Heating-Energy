@@ -67,14 +67,70 @@ from eatlib import * # import eatlib - the only library you'll ever need
 ####################################################################################################################
 # SANDBOX
 
+# 11: test streamlit
+import streamlit as st
+import pandas as pd
+import altair as alt
+
+@st.cache
+def get_UN_data():
+    AWS_BUCKET_URL = "https://streamlit-demo-data.s3-us-west-2.amazonaws.com"
+    df = pd.read_csv(AWS_BUCKET_URL + "/agri.csv.gz")
+    return df.set_index("Region")
+
+try:
+    df = get_UN_data()
+    countries = st.multiselect(
+        "Choose countries", list(df.index), ["China", "United States of America"]
+    )
+    if not countries:
+        st.error("Please select at least one country.")
+    else:
+        data = df.loc[countries]
+        data /= 1000000.0
+        st.write("### Gross Agricultural Production ($B)", data.sort_index())
+
+        data = data.T.reset_index()
+        data = pd.melt(data, id_vars=["index"]).rename(
+            columns={"index": "year", "value": "Gross Agricultural Product ($B)"}
+        )
+        chart = (
+            alt.Chart(data)
+            .mark_area(opacity=0.3)
+            .encode(
+                x="year:T",
+                y=alt.Y("Gross Agricultural Product ($B):Q", stack=None),
+                color="Region:N",
+            )
+        )
+        st.altair_chart(chart, use_container_width=True)
+except urllib.error.URLError as e:
+    st.error(
+        """
+        **This demo requires internet access.**
+
+        Connection error: %s
+    """
+        % e.reason
+    )
+
+
+
+## 10: test out psychrochart
+# from psychrochart import PsychroChart
+# import matplotlib.pyplot as plt
+#
+# PsychroChart('minimal').plot(ax=plt.gca())
+# plt.show()
+
+
+
 # 9: try reading excel file
-root = './' # define path to sample data
-
-df = pd.read_excel(root + 'User Inputs 2.xlsx', sheet_name=1) # read data into a DataFrame and print some info
-print('\nDATA READ SUCCESSFULLY...\n')
-print(df)
-
-
+# root = './' # define path to sample data
+#
+# df = pd.read_excel(root + 'User Inputs 2.xlsx', sheet_name=2) # read data into a DataFrame and print some info
+# print('\nDATA READ SUCCESSFULLY...\n')
+# print(df)
 
 
 
