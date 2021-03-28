@@ -14,15 +14,20 @@ from eatlib import * # import eatlib - the only library you'll ever need
 ####################################################################################################################
 # SCRIPT
 
-# plot clean EAT data using plot_time - STABLE
-# define paths and filenames
-filepath_in = './DataCleaner Output Files/' # use output files from JH_CSV_DataCleaner
-# filepath_out = './Plots/'   # where the plot gets saved
-file_name = '2019 CHP Raw Trend_OUT_Clean_Data' #name of the file w/o .csv suffix (used to conveniently name plots, but maybe not robust)
+uploaded_file = st.file_uploader("Choose a file")
+if uploaded_file is not None:
+    df = pd.read_csv(uploaded_file)
+    st.write(df)
 
-df = pd.read_csv(filepath_in + file_name + '.csv') # read data into a DataFrame and print some info
-print('\nDATA READ SUCCESSFULLY...\n')
-print(df)
+# # plot clean EAT data using plot_time - STABLE
+# # define paths and filenames
+# filepath_in = './DataCleaner Output Files/' # use output files from JH_CSV_DataCleaner
+# # filepath_out = './Plots/'   # where the plot gets saved
+# file_name = '2019 CHP Raw Trend_OUT_Clean_Data' #name of the file w/o .csv suffix (used to conveniently name plots, but maybe not robust)
+#
+# df = pd.read_csv(filepath_in + file_name + '.csv') # read data into a DataFrame and print some info
+# print('\nDATA READ SUCCESSFULLY...\n')
+# print(df)
 
 # !!! drop the first column of data so timestamps are in column
 df.drop(df.columns[0],axis=1,inplace=True)
