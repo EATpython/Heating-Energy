@@ -23,7 +23,8 @@ uploaded_file = st.file_uploader("Choose a file")
 df=[]
 if uploaded_file is not None:
     df = pd.read_csv(uploaded_file)
-    df.drop(df.columns[0], axis=1, inplace=True) # !!! drop the first column of data so timestamps are in column
+    if df.colums[0] = 'Unnamed: 0':
+        df.drop(df.columns[0], axis=1, inplace=True) # !!! drop the first column of data so timestamps are in column
     print('calling plot_time function...')
     fig = plot_time(df)
     st.dataframe(df)
