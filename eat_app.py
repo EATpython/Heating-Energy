@@ -26,7 +26,6 @@ if uploaded_file is not None:
     print('calling plot_time function...')
     fig = plot_time(df)
 
-    st.title('Trend Data Visualization')
     st.dataframe(df)
     st.plotly_chart(fig, use_container_width=True)
 # else:
