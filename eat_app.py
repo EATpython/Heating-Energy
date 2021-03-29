@@ -21,6 +21,7 @@ st.subheader('Upload a .csv file with timestamps in the first column and trend d
 
 uploaded_file = st.file_uploader("Choose a file")
 df=[]
+
 if uploaded_file is not None:
     df = pd.read_csv(uploaded_file)
     if df.columns[0] == 'Unnamed: 0':
@@ -31,17 +32,3 @@ if uploaded_file is not None:
     st.dataframe(df)
     st.subheader('Point Trends:')
     st.plotly_chart(fig, use_container_width=True)
-# else:
-#     filepath_in = './DataCleaner Output Files/' # use output files from JH_CSV_DataCleaner
-#     file_name = '2019 CHP Raw Trend_OUT_Clean_Data' #name of the file w/o .csv suffix (used to conveniently name plots, but maybe not robust)
-#     df = pd.read_csv(filepath_in + file_name + '.csv') # read data into a DataFrame and print some info
-#     print('\nDATA READ SUCCESSFULLY...\n')
-#     print(df)
-
-
-
-# call a function from eatlib to plot the data
-
-# fig.write_html(filepath_out + file_name + '_Plot.html')   # write the plot to html so it's shareable
-# fig.show()
-
