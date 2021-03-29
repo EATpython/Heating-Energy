@@ -13,7 +13,9 @@ from eatlib import * # import eatlib - the only library you'll ever need
 
 ####################################################################################################################
 # SCRIPT
+logo = './images/P2S LOGO_COLOR.png'
 
+st.image(logo)
 st.title('Trend Data Visualization')
 
 uploaded_file = st.file_uploader("Choose a file")
