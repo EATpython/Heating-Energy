@@ -15,8 +15,6 @@ from eatlib import * # import eatlib - the only library you'll ever need
 # SCRIPT
 
 st.title('Trend Data Visualization')
-st.
-st.button('Hit me')
 
 uploaded_file = st.file_uploader("Choose a file")
 df=[]
