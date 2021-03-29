@@ -15,7 +15,7 @@ from eatlib import * # import eatlib - the only library you'll ever need
 # SCRIPT
 logo = './images/EAT LOGO_COLOR.png'
 
-st.image(logo)
+st.image(logo,width=1)
 st.title('Trend Data Visualization')
 
 uploaded_file = st.file_uploader("Choose a file")
@@ -25,7 +25,6 @@ if uploaded_file is not None:
     df.drop(df.columns[0], axis=1, inplace=True) # !!! drop the first column of data so timestamps are in column
     print('calling plot_time function...')
     fig = plot_time(df)
-
     st.dataframe(df)
     st.plotly_chart(fig, use_container_width=True)
 # else:
