@@ -15,7 +15,7 @@ from eatlib import * # import eatlib - the only library you'll ever need
 # SCRIPT
 logo = './images/EAT LOGO_COLOR.png'
 
-st.image(logo,width=5)
+st.image(logo,width=10)
 st.title('Trend Data Visualization')
 
 uploaded_file = st.file_uploader("Choose a file")
