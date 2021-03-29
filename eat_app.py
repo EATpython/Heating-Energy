@@ -17,6 +17,7 @@ logo = './images/EAT LOGO_COLOR.png'
 
 st.image(logo,width=None)
 st.title('Trend Data Visualization')
+st.header('Upload a .csv file with timestamps in the first column and trend data in the remaining columns. ')
 
 uploaded_file = st.file_uploader("Choose a file")
 df=[]
