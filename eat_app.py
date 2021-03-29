@@ -27,6 +27,7 @@ if uploaded_file is not None:
     print('calling plot_time function...')
     fig = plot_time(df)
     st.dataframe(df)
+    st.subheader('Point Trends:')
     st.plotly_chart(fig, use_container_width=True)
 # else:
 #     filepath_in = './DataCleaner Output Files/' # use output files from JH_CSV_DataCleaner
