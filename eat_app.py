@@ -27,6 +27,7 @@ if uploaded_file is not None:
         df.drop(df.columns[0], axis=1, inplace=True) # !!! drop the first column of data so timestamps are in column
     print('calling plot_time function...')
     fig = plot_time(df)
+    st.subheader('Data:')
     st.dataframe(df)
     st.subheader('Point Trends:')
     st.plotly_chart(fig, use_container_width=True)
