@@ -45,7 +45,9 @@ if st.button('See example'):
     """
     ### Raw Data (example):
 
-    Uploaded file should be in .csv format with timestamps in the first column and trend data in the remaining columns. This app supports a variety of timestamp formats, but the format should be consistent for all timestamps in the uploaded file. Trend data columns should have meaningful titles.
+    Uploaded file should be in .csv format with timestamps in the first column and trend data in the remaining 
+    columns. This app supports a variety of timestamp formats, but the format should be consistent for all 
+    timestamps in the uploaded file. Trend data columns should have meaningful titles (best practice: use *lowercase*, *lowercase_with_underscores*, or *camelCase*)
 
     Click "See example" again to see a different example.
     """
