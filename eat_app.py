@@ -23,7 +23,7 @@ st.image(logo, width=None)
 
 # use triple quotes instead of st.write() for multiline printing using Markdown syntax
 # (https://www.markdownguide.org/cheat-sheet/)
-"""`Welcome to the party! This is an experimental app in development by the P2S Energy Automation Team. If you run 
+"""`Welcome to the party! This is an experimental app being developed by the P2S Energy Automation Team. If you run 
 into any bugs/errors or have suggestions for additional features/functionality, please use the "Report a bug with 
 this app" tool in the drop down menu in the top right corner of this page. Thanks for playing!` 
 
