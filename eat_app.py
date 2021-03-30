@@ -16,11 +16,12 @@ from eatlib import * # import eatlib - the only library you'll ever need
 logo = './images/EAT LOGO_COLOR.png'
 
 st.image(logo,width=None)
-st.write('''
-         ###Title 1
-         ##Title 2
-         #Title 3    
-         ''')
+"""
+###Title 1
+##Title 2
+#Title 3
+"""
+
 st.subheader('Upload a .csv file with timestamps in the first column and trend data in the remaining columns. ')
 
 uploaded_file = st.file_uploader("Choose a file")
