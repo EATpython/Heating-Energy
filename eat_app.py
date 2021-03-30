@@ -47,7 +47,7 @@ if st.button('See example'):
     """
     # st.dataframe(df.set_index('column', inplace=True))
     df.set_index('column', inplace=True)
-    st.dataframe(df)
+    st.dataframe(df.assign(hack='').set_index('hack'))
     """
     ### Point Trends (example):
     
