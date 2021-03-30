@@ -59,13 +59,21 @@ if uploaded_file is not None:
         df.drop(df.columns[0], axis=1, inplace=True) # !!! drop the first column of data so timestamps are in column
     print('calling plot_time function...')
     fig = plot_time(df)
-    st.subheader('Data:')
+    """
+    ### Data:
+
+    Uploaded file should be in .csv format with timestamps in the first column, and trend data in the remaining columns. This app supports a variety of timestamp formats, but the format should be consistent for all timestamps in the uploaded file. Trend data columns should have meaningful titles.
+
+    Click "See example" again to see a different example, or upload a different file.
+    """
     st.dataframe(df)
     """
-    ### Point Trends
+    ### Point Trends:
     
     Click on point names in the legend to make them visible.
     
     Pan and zoom with your mouse to get a closer look at the data. Double click inside the graph to reset the axes.
+    
+    You can download this graph as a .png by clicking the camera icon in the plot figure menu.
     """
     st.plotly_chart(fig, use_container_width=True)
