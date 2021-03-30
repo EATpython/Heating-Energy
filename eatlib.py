@@ -104,7 +104,7 @@ def plot_time(df):
 
     fig.update_layout(showlegend=True)    # force the legend for single-trace plots
     fig.update_layout(legend_title_text='Points:')
-    fig.update_layout(hovermode='compare')
+    fig.update_layout(hovermode='x')
     # fig.show()    # changed this to return a fig instead of plotting. can change back if we want.
     return fig
 #
