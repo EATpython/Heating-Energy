@@ -39,7 +39,7 @@ if st.button('See example'):
     print('calling plot_time function...')
     fig = plot_time(df)
     """
-    ### Data (example):
+    ### Raw Data (example):
 
     Uploaded file should be in .csv format with timestamps in the first column and trend data in the remaining columns. This app supports a variety of timestamp formats, but the format should be consistent for all timestamps in the uploaded file. Trend data columns should have meaningful titles.
 
@@ -47,7 +47,7 @@ if st.button('See example'):
     """
     st.dataframe(df.assign(drop_index='').set_index('drop_index')) # this line displays the .csv file in table format, with the index column suppressed to avoid confusion
     """
-    ### Point Trends (example):
+    ### Point Trend Graph (example):
     
     Click on point names in the legend to make them visible.
     
@@ -64,7 +64,7 @@ if uploaded_file is not None:
     print('calling plot_time function...')
     fig = plot_time(df)
     """
-    ### Data:
+    ### Raw Data:
 
     Uploaded file should be in .csv format with timestamps in the first column and trend data in the remaining columns. This app supports a variety of timestamp formats, but the format should be consistent for all timestamps in the uploaded file. Trend data columns should have meaningful titles.
 
@@ -72,7 +72,7 @@ if uploaded_file is not None:
     """
     st.dataframe(df.assign(drop_index='').set_index('drop_index')) # this line displays the .csv file in table format, with the index column suppressed to avoid confusion
     """
-    ### Point Trends:
+    ### Point Trend Graph:
     
     Click on point names in the legend to make them visible.
     
