@@ -14,9 +14,9 @@ from eatlib import * # import eatlib - the only library you'll ever need
 ####################################################################################################################
 # SCRIPT
 logo = './images/EAT LOGO_COLOR.png'
-
 st.image(logo,width=None)
 
+# use triple quotes instead of st.write() for multiline printing using Markdown syntax (https://www.markdownguide.org/cheat-sheet/)
 """
 # Trend Data Visualization App
 ### Upload a .csv file with timestamps in the first column and trend data in the remaining columns. 
