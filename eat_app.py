@@ -22,8 +22,9 @@ st.image(logo,width=None)
 ### Upload a .csv file with timestamps in the first column and trend data in the remaining columns. 
 """
 my_text = 'nice one'
-i=0
+
 if st.button('See example'):
+    i = 0
     if i % 2 == 0:
         st.write(my_text)
         i += 1
