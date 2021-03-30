@@ -25,16 +25,19 @@ fig = go.Figure()
 # Trend Data Visualization App
 ### Upload a .csv file with timestamps in the first column and trend data in the remaining columns. 
 """
-my_text = 'nice one'
-
-
 
 if st.button('See example'):
-    df =
+    df = pd.read_csv(random.choice(os.listdir("./example data"))) # pick a random file from ./example_data
+    if df.columns[0] == 'Unnamed: 0':
+        df.drop(df.columns[0], axis=1, inplace=True) # !!! drop the first column of data so timestamps are in column
+    print('calling plot_time function...')
+    fig = plot_time(df)
+    st.subheader('Example Data:')
+    st.dataframe(df)
+    st.subheader('Example Point Trends:')
+    st.plotly_chart(fig, use_container_width=True)
 
 uploaded_file = st.file_uploader("Choose a file")
-df=[]
-
 
 if uploaded_file is not None:
     df = pd.read_csv(uploaded_file)
