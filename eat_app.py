@@ -15,7 +15,7 @@ from eatlib import * # import eatlib - the only library you'll ever need
 # SCRIPT
 
 # do some housekeeping and create some variables
-st. set_page_config(layout="wide")
+st.set_page_config(layout="wide")
 example_data_path = './example data/'
 logo = './images/EAT LOGO_COLOR.png'
 df=[]
