@@ -57,6 +57,7 @@ if st.button('See example'):
     """
     st.plotly_chart(fig, use_container_width=True)
 
+# TODO: play around with structure and if/else statements so example data/plots and real data/plots replace each other on the page instead of doubling up
 if uploaded_file is not None:
     df = pd.read_csv(uploaded_file)
     if df.columns[0] == 'Unnamed: 0':
