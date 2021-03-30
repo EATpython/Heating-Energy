@@ -28,7 +28,7 @@ fig = go.Figure()
 # Trend Data Visualization App
 Quickly visualize lots of trend data to gain engineering insights and make nice looking graphs to include in reports/presentations.
 
-To get started, upload a .csv file with timestamps in the first column and trend data in the remaining columns or click "See example"
+To get started, upload a .csv file with timestamps in the first column and trend data in the remaining columns or click "See example".
 """
 uploaded_file = st.file_uploader("Choose a file")
 
