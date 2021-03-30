@@ -60,7 +60,7 @@ if st.button('See example'):
 if uploaded_file is not None:
     df = pd.read_csv(uploaded_file)
     if df.columns[0] == 'Unnamed: 0':
-        df.drop(df.columns[0], axis=1, inplace=True) # !!! drop the first column of data so timestamps are in column
+        df.drop(df.columns[0], axis=1, inplace=True) # !!! drop the first column of data so timestamps are in column - this is hardcoded to accomodate JH_CSV_DataCleaner.py outputs
     print('calling plot_time function...')
     fig = plot_time(df)
     """
