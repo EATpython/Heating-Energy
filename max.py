@@ -44,29 +44,43 @@ from eatlib import * # import eatlib - the only library you'll ever need
 
 
 # 3: plot clean EAT data using plot_time - STABLE
-# define paths and filenames
-filepath_in = './DataCleaner Output Files/' # use output files from JH_CSV_DataCleaner
-filepath_out = './Plots/'   # where the plot gets saved
-file_name = '2019 CHP Raw Trend_OUT_Clean_Data' #name of the file w/o .csv suffix (used to conveniently name plots, but maybe not robust)
+# # define paths and filenames
+# filepath_in = './DataCleaner Output Files/' # use output files from JH_CSV_DataCleaner
+# filepath_out = './Plots/'   # where the plot gets saved
+# file_name = '2019 CHP Raw Trend_OUT_Clean_Data' #name of the file w/o .csv suffix (used to conveniently name plots, but maybe not robust)
+#
+# df = pd.read_csv(filepath_in + file_name + '.csv') # read data into a DataFrame and print some info
+# print('\nDATA READ SUCCESSFULLY...\n')
+# print(df)
+#
+# # !!! drop the first column of data so timestamps are in column
+# df.drop(df.columns[0],axis=1,inplace=True)
+#
+# # call a function from eatlib to plot the data
+# print('calling plot_time function...')
+# fig = plot_time(df)
+# fig.write_html(filepath_out + file_name + '_Plot.html')   # write the plot to html so it's shareable
+# fig.show()
 
-df = pd.read_csv(filepath_in + file_name + '.csv') # read data into a DataFrame and print some info
-print('\nDATA READ SUCCESSFULLY...\n')
-print(df)
 
-# !!! drop the first column of data so timestamps are in column
-df.drop(df.columns[0],axis=1,inplace=True)
-
-# call a function from eatlib to plot the data
-print('calling plot_time function...')
-fig = plot_time(df)
-fig.write_html(filepath_out + file_name + '_Plot.html')   # write the plot to html so it's shareable
-fig.show()
-
-
-
+df = []
 ####################################################################################################################
 # SANDBOX
-#
+
+# 12: test os & random
+example_data_path = './example data/'
+
+df = pd.read_csv(example_data_path + random.choice(os.listdir(example_data_path)))  # pick a random file from ./example_data
+if df.columns[0] == 'Unnamed: 0':
+    df.drop(df.columns[0], axis=1, inplace=True)  # !!! drop the first column of data so timestamps are in column
+print('calling plot_time function...')
+fig = plot_time(df)
+st.subheader('Example Data:')
+st.dataframe(df)
+st.subheader('Example Point Trends:')
+st.plotly_chart(fig, use_container_width=True)
+
+
 # # 11: test streamlit
 # import streamlit as st
 # import pandas as pd
