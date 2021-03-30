@@ -18,12 +18,9 @@ logo = './images/EAT LOGO_COLOR.png'
 st.image(logo,width=None)
 
 """
-### Title 1
-## Title 2
-# Title 3
+# Trend Data Visualization App
+## Upload a .csv file with timestamps in the first column and trend data in the remaining columns. 
 """
-
-st.subheader('Upload a .csv file with timestamps in the first column and trend data in the remaining columns. ')
 
 uploaded_file = st.file_uploader("Choose a file")
 df=[]
