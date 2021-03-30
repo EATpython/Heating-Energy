@@ -22,6 +22,9 @@ st.image(logo,width=None)
 ### Upload a .csv file with timestamps in the first column and trend data in the remaining columns. 
 """
 
+if st.button('See example'):
+    st.write('nice one')
+
 uploaded_file = st.file_uploader("Choose a file")
 df=[]
 
