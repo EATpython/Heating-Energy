@@ -45,7 +45,7 @@ if st.button('See example'):
 
     Click "See example" again to see a different example.
     """
-    st.dataframe(df.assign(hack='').set_index('hack'))
+    st.dataframe(df.assign(drop_index='').set_index('drop_index')) # this line displays the .csv file in table format, with the index column suppressed to avoid confusion
     """
     ### Point Trends (example):
     
@@ -70,7 +70,7 @@ if uploaded_file is not None:
 
     Click "See example" again to see a different example, or upload a different file.
     """
-    st.dataframe(df)
+    st.dataframe(df.assign(drop_index='').set_index('drop_index')) # this line displays the .csv file in table format, with the index column suppressed to avoid confusion
     """
     ### Point Trends:
     
