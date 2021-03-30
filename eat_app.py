@@ -13,8 +13,12 @@ from eatlib import * # import eatlib - the only library you'll ever need
 
 ####################################################################################################################
 # SCRIPT
+
+# do some housekeeping and create some variables
 logo = './images/EAT LOGO_COLOR.png'
 st.image(logo,width=None)
+df=[]
+fig = go.Figure()
 
 # use triple quotes instead of st.write() for multiline printing using Markdown syntax (https://www.markdownguide.org/cheat-sheet/)
 """
@@ -23,17 +27,14 @@ st.image(logo,width=None)
 """
 my_text = 'nice one'
 
+
+
 if st.button('See example'):
-    i = 0
-    if i % 2 == 0:
-        st.write(my_text)
-        i += 1
-    else:
-        st.write('')
-        i += 1
+    df =
 
 uploaded_file = st.file_uploader("Choose a file")
 df=[]
+
 
 if uploaded_file is not None:
     df = pd.read_csv(uploaded_file)
