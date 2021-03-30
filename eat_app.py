@@ -26,7 +26,9 @@ fig = go.Figure()
 `This is an experimental app in development by the P2S Energy Automation Team. If you run into any bugs/errors or have suggestions for additional features/functionality, please use the "Report a bug with this app" tool in the drop down menu in the top right corner of this page. Thanks for playing!`
 
 # Trend Data Visualization App
-### Upload a .csv file with timestamps in the first column and trend data in the remaining columns. 
+### Quickly visualize lots of trend data to gain engineering insights and make nice looking graphs to include in reports/presentations.
+
+Upload a .csv file with timestamps in the first column and trend data in the remaining columns. 
 """
 uploaded_file = st.file_uploader("Choose a file")
 
@@ -39,7 +41,7 @@ if st.button('See example'):
     """
     ### Data (example):
 
-    Uploaded file should be in .csv format with timestamps in the first column, and trend data in the remaining columns. This app supports a variety of timestamp formats, but the format should be consistent for all timestamps in the uploaded file. Trend data columns should have meaningful titles.
+    Uploaded file should be in .csv format with timestamps in the first column and trend data in the remaining columns. This app supports a variety of timestamp formats, but the format should be consistent for all timestamps in the uploaded file. Trend data columns should have meaningful titles.
 
     Click "See example" again to see a different example.
     """
@@ -64,7 +66,7 @@ if uploaded_file is not None:
     """
     ### Data:
 
-    Uploaded file should be in .csv format with timestamps in the first column, and trend data in the remaining columns. This app supports a variety of timestamp formats, but the format should be consistent for all timestamps in the uploaded file. Trend data columns should have meaningful titles.
+    Uploaded file should be in .csv format with timestamps in the first column and trend data in the remaining columns. This app supports a variety of timestamp formats, but the format should be consistent for all timestamps in the uploaded file. Trend data columns should have meaningful titles.
 
     Click "See example" again to see a different example, or upload a different file.
     """
