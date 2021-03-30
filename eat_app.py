@@ -39,7 +39,7 @@ if st.button('See example'):
     st.subheader('Data (example):')
     st.dataframe(df)
     """
-    ###Point Trends (example):
+    ### Point Trends (example):
     
     Click on point names in the legend to make them visible.
     
