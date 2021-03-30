@@ -17,9 +17,11 @@ from eatlib import * # import eatlib - the only library you'll ever need
 # do some housekeeping and create some variables
 example_data_path = './example data/'
 logo = './images/EAT LOGO_COLOR.png'
-st.image(logo,width=None)
 df=[]
 fig = go.Figure()
+
+# start printing stuff to the page, starting with a logo
+st.image(logo,width=None)
 
 # use triple quotes instead of st.write() for multiline printing using Markdown syntax (https://www.markdownguide.org/cheat-sheet/)
 """
@@ -30,6 +32,7 @@ Quickly visualize lots of trend data to gain engineering insights and make nice 
 
 To get started, upload a .csv file with timestamps in the first column and trend data in the remaining columns or click "See example".
 """
+
 uploaded_file = st.file_uploader("Choose a file")
 
 if st.button('See example'):
