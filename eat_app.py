@@ -29,6 +29,7 @@ fig = go.Figure()
 uploaded_file = st.file_uploader("Choose a file")
 
 if st.button('See example'):
+    uploaded_file = []
     df = pd.read_csv(example_data_path + random.choice(os.listdir(example_data_path)))  # pick a random file from ./example_data/
     if df.columns[0] == 'Unnamed: 0':
         df.drop(df.columns[0], axis=1, inplace=True) # !!! drop the first column of data so timestamps are in column
