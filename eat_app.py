@@ -50,6 +50,8 @@ if st.button('See example'):
     Click on point names in the legend to make them visible.
     
     Pan and zoom with your mouse to get a closer look at the data. Double click inside the graph to reset the axes.
+    
+    You can download this graph as a .png by clicking the camera icon in the plot figure menu.
     """
     st.plotly_chart(fig, use_container_width=True)
 
