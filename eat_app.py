@@ -36,7 +36,13 @@ if st.button('See example'):
     fig = plot_time(df)
     st.subheader('Example Data:')
     st.dataframe(df)
-    st.subheader('Example Point Trends:')
+    """
+    ### Example Point Trends
+    
+    Click on point names in the legend to make them visible.
+    
+    Pan and zoom with your mouse to get a closer look at the data. Double click inside the graph to reset the axes.
+    """
     st.plotly_chart(fig, use_container_width=True)
 
 if uploaded_file is not None:
@@ -49,7 +55,9 @@ if uploaded_file is not None:
     st.dataframe(df)
     """
     ### Point Trends
+    
     Click on point names in the legend to make them visible.
+    
     Pan and zoom with your mouse to get a closer look at the data. Double click inside the graph to reset the axes.
     """
     st.plotly_chart(fig, use_container_width=True)
