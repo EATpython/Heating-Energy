@@ -21,9 +21,15 @@ st.image(logo,width=None)
 # Trend Data Visualization App
 ### Upload a .csv file with timestamps in the first column and trend data in the remaining columns. 
 """
-
+my_text = 'nice one'
+i=0
 if st.button('See example'):
-    st.write('nice one')
+    if i % 2 == 0:
+        st.write(my_text)
+        i += 1
+    else:
+        st.write('')
+        i += 1
 
 uploaded_file = st.file_uploader("Choose a file")
 df=[]
