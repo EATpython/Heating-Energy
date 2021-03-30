@@ -45,7 +45,7 @@ if st.button('See example'):
 
     Click "See example" again to see a different example.
     """
-    st.dataframe(df)
+    st.dataframe(df.set_index('column', inplace=True))
     """
     ### Point Trends (example):
     
