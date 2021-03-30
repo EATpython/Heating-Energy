@@ -36,10 +36,10 @@ if st.button('See example'):
         df.drop(df.columns[0], axis=1, inplace=True) # !!! drop the first column of data so timestamps are in column
     print('calling plot_time function...')
     fig = plot_time(df)
-    st.subheader('Example Data:')
+    st.subheader('Data (example):')
     st.dataframe(df)
     """
-    ### Example Point Trends
+    ###Point Trends (example):
     
     Click on point names in the legend to make them visible.
     
