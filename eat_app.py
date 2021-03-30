@@ -29,8 +29,8 @@ this app" tool in the drop down menu in the top right corner of this page. Thank
 
 # Trend Data Visualization App 
 
-Quickly visualize lots of trend data to gain engineering insights and make nice 
-looking graphs to include in reports/presentations. 
+Quickly visualize lots of trend data to gain engineering insights and make nice-looking graphs to include in 
+reports/presentations. 
 
 To get started, upload a .csv file with timestamps in the first column and trend data in the remaining columns or 
 click "See example"."""
