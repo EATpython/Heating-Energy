@@ -626,6 +626,7 @@ def carbon_calculator():
 
 ##############################################################################
 
+#PLOTTING FUNCTIONS BELOW MAY BE DEPRECATED - see eatlib.py for most current plotting functions
 ##############################################################################
 # 4.j : Variable vs Time Plotter function - @max
 ## Inputs
