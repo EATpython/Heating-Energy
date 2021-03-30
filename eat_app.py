@@ -27,7 +27,9 @@ st.image(logo, width=None)
 into any bugs/errors or have suggestions for additional features/functionality, please use the "Report a bug with 
 this app" tool in the drop down menu in the top right corner of this page. Thanks for playing!` 
 
-# Trend Data Visualization App Quickly visualize lots of trend data to gain engineering insights and make nice 
+# Trend Data Visualization App 
+
+Quickly visualize lots of trend data to gain engineering insights and make nice 
 looking graphs to include in reports/presentations. 
 
 To get started, upload a .csv file with timestamps in the first column and trend data in the remaining columns or 
@@ -39,7 +41,6 @@ if st.button('See example'):
     df = pd.read_csv(example_data_path + random.choice(os.listdir(example_data_path)))  # pick a random example file
     if df.columns[0] == 'Unnamed: 0':
         df.drop(df.columns[0], axis=1, inplace=True)  # !!! drop the first column of data so timestamps are in column
-    print('calling plot_time function...')
     fig = plot_time(df)
 
     """
@@ -55,6 +56,7 @@ if st.button('See example'):
 
     # this line displays the .csv file in table format, with the index column suppressed to avoid confusion
     st.dataframe(df.assign(drop_index='').set_index('drop_index'))
+
     """
     ### Point Trend Graph (example):
     
@@ -64,6 +66,7 @@ if st.button('See example'):
     
     You can download this graph as a .png by clicking the camera icon in the plot figure menu.
     """
+
     st.plotly_chart(fig, use_container_width=True)
 
 # TODO: play around with structure and if/else statements so example data/plots and real data/plots replace each
