@@ -349,6 +349,7 @@ print(calc_bldg_load_mbh().head())
 ## Input : LoadProfile, data_path, Equipment
 ## df variable pulled from calc_bldg_load_mbh function. Returns clean dataset.
 ## Outputs : EquipmentOutput
+print('Running 4.d : EquipmentDemand Function')
 
 LoadProfile = calc_bldg_load_mbh()  # returns dataframe 'df' values
 
@@ -390,6 +391,7 @@ EquipmentOutput['EquipmentOutput'] = Load_Temp.apply(EquipmentDemand, axis=1, Eq
 # EquipmentOutput.to_csv('EquipmentOutput.csv')
 print()
 print(EquipmentOutput)
+print('End of 4.d : EquipmentDemand Function')
 #################################################################################################################
 
 
@@ -427,6 +429,7 @@ BoilerAnnualTherms = BoilerAnnualConsumption / 1000
 ##############################################################################
 
 
+
 ##############################################################################
 # 4.f : Chiller Consumption Function
 ## Libraries : Pandas as pd, numpy as np, from scipy.optimize import curve_fit
@@ -445,7 +448,6 @@ n = 6  # need to find R value to optimize this
 # this should come from other section of code
 Load_CHW = pd.DataFrame([236.1, 60, 70, 66])
 
-
 # =============================================================================
 # Method 2 : Calculate the polynomial and sending the polynomial out
 # to do : find the R for the fitted curve
@@ -461,7 +463,9 @@ def ChillerConsumption(Load, curveTons, curveKws):
 
 
 # how to call this function
+
 ChillerKwConsumption = pd.DataFrame(ChillerConsumption(Load=Load_CHW, curveTons=tons, curveKws=kws))
+
 # =============================================================================
 ##############################################################################
 # 4.g ELECTRIC COST CALCULATOR
@@ -698,5 +702,52 @@ def plot_x(df):
 
 ##############################################################################
 # 4.l : Disstribution Energy Consumption
-## Input
-## Outputs
+    ## Libraries : Pandas as pd
+## Input : Pumps information {quantity, hp, MaxGPM, turndown, efficicnecy, *config }
+## Outputs PumpKw
+    
+#define a class for pumps, maybe we want this in a function and read all the classes at once
+class Pump:
+    def __init__(self, quantity, HP, MaxGPM, turndown, efficiency):
+        self.quantity = quantity
+        self.HP = HP
+        self.MaxGPM = MaxGPM
+        self.turndown = turndown
+        self.efficiency = efficiency
+   
+# =============================================================================
+# I defined the pump variables here, but we would like this to be read from a file
+
+CHWP1 = Pump(1,10,40,10,90)
+print(CHWP1.__dict__)
+# =============================================================================
+
+# =============================================================================
+#here i am reading the excel file directly, but later we have to just read the correct column in the clean data
+data_path = 'C:/Users\Taraneh/Documents/GitHub/Heating-Energy/Inputs'
+ 
+Data = pd.read_csv(data_path + '/2019 CHP Raw Trend.CSV', index_col=0)
+
+#just picking the column i want for now 
+
+flow =pd.DataFrame ( data = Data['CHP Flow'] )
+
+# =============================================================================
+
+def PumpConsumption(row, pump):
+    GPM = pump.MaxGPM
+    TD = pump.turndown
+    HP = pump.HP 
+    if row['CHP Flow'] > (GPM * TD/100) :
+        power = ((row['CHP Flow']/ GPM)**3) * HP 
+    else:
+        power = 0
+    return power
+
+#output data frame
+PumpKw = pd.DataFrame(columns=['Pump Consumption'])
+
+# =============================================================================
+#Function Call 
+
+PumpKw['Pump Consumption'] = flow.apply(PumpConsumption , axis = 1, pump = CHWP1)
