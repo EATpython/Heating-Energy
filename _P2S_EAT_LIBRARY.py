@@ -473,107 +473,117 @@ ChillerKwConsumption = pd.DataFrame(ChillerConsumption(Load=Load_CHW, curveTons=
 # import numpy as np
 
 # kw data imported fro Tara's section
-Energycost = fill_empty_fields()
-Energyusage = EquipmentDemand()
+Energyusage = EquipmentDemand
 Energycost= pd.DataFrame(columns=['Costofenergy'])
+Energycost = fill_empty_fields()
+
 
 ####################################
 # Calculation inside the fuction
 #####################################
 def Energycalc(Energycost,Energy_usage):
+    Summer_start, Summer_end = input("Enter Summer start and end months").split()
+    Summer_superpeak_start, Summer_superpeak_end, Summer_superpeak_cost = input("Enter Summer superpeak start hour, end hour and Cost per kwh respectively").split()
+    Summer_peak_start, Summer_peak_end, Summer_peak_cost = input("Enter Summer peak start hour, end hour and Cost per kwh respectively").split()
+    Summer_midpeak_start, Summer_midpeak_end, Summer_midpeak_cost = input("Ener Summer midpeak start hour, end hour and Cost per kwh respectively").split()
+    Summer_base_start, Summer_base_end, Summer_base_cost = input("Enter summer Base start hour, end hour and Cost per kwh respectively").split()
+    Summer_superbase_start, Summer_superbase_end, Summer_superbase_cost = input("Enter summer Superbase start hour, end hour and Cost per kwh respectively").split()
+    # WINTER IS COMING##########
+    Winter_superpeak_start, Winter_superpeak_end, Winter_superpeak_cost = input("Enter Winter superpeak start hour, end hour and Cost per kwh respectively").split()
+    Winter_peak_start, Winter_peak_end, Winter_peak_cost = input("Enter Winter peak start hour, end hour and Cost per kwh respectively").split()
+    Winter_midpeak_start, Winter_midpeak_end, Winter_midpeak_cost = input("Ener Winter midpeak start hour, end hour and Cost per kwh respectively").split()
+    Winter_base_start, Winter_base_end, Winter_base_cost = input("Enter Winter Base start hour, end hour and Cost per kwh respectively").split()
+    Winter_superbase_start, Winter_superbase_end, Winter_superbase_cost = input("Enter Winter Superbase start hour, end hour and Cost per kwh respectively").split()
 
-    Currentmonth = 1
-    #month1= begining of summer and month2 = end of summer
-    Time=0
-    If (Currentmonth < month1 or currentmonth > month2):
-        {
-        ################################
-        #Winter Calculation
-        ################################
-        switch(Energycost,Energy_usage,Time):
-           {
-            case 1: Time <= Energycost['superbase1'];
-                Totalenergycost = Energy_usage * Energycost['superbase1'];
-                Transmission_charge = 0.01 ; # should be modified by the user
-                TransmissionCost = Energy_usage * Transmission_charge;
-                Total_cost = TransmissionCost + Totalenergycost;
-                # Saving to CSV
-                Total_cost.to_csv('TotalCost.csv');
-                Time = Time+1;
-                 break;
+    # TRANSFER TDM DATA TO VARIABLES
 
-            case 2: Time > Energycost['superbase1'] and Time <= Energycost['base']; #Code will run with base, super base, peak and super peak all with same values
-                Totalenergycost = Energy_usage * Energycost['base']
-                Transmission_charge = 0.01  # should be modified by the user
-                TransmissionCost = Energy_usage * Transmission_charge
-                Total_cost = TransmissionCost + Totalenergycost
-                # Saving to CSV
-                Total_cost.to_csv('TotalCost.csv')
-                Time = Time + 1
-                break;
+    Time = Energyusage['Time']
+    Day = Energyusage['Day']
+    Month = Energyusage['Month']
 
-            case 3: Time > base and Time<= peak;
-                Totalenergycost = Energy_usage * Energycost['peak'];
-                Transmission_charge = 0.01 ; # should be modified by the user
-                TransmissionCost = Energy_usage * Transmission_charge;
-                Total_cost = TransmissionCost + Totalenergycost;
-                # Saving to CSV
-                Total_cost.to_csv('TotalCost.csv');
-                Time=Time+1;
-                break;
-           }
-        else  {
-                 ################################
-                 #Summer calculation
-                 ################################
-               switch(Energycost,Energy_usage,Time):
-           {
-            case 1: Time <= Energycost['SUMsuperbase'];
-                Totalenergycost = Energy_usage * Energycost['SUMsuperbase'];
-                Transmission_charge = 0.01 ; # should be modified by the user
-                TransmissionCost = Energy_usage * Transmission_charge;
-                Total_cost = TransmissionCost + Totalenergycost;
-                # Saving to CSV
-                Total_cost.to_csv('TotalCost.csv');
-                Time = Time+1;
-                 break;
+    ##############SUMMER CALC#################
 
-            case 2: Time > Energycost['SUMsuperbase'] and Time <= Energycost['SUMbase']; #Code will run with base, super base, peak and super peak all with same values
-                Totalenergycost = Energy_usage * Energycost['SUMbase']
-                Transmission_charge = 0.01  # should be modified by the user
-                TransmissionCost = Energy_usage * Transmission_charge
-                Total_cost = TransmissionCost + Totalenergycost
-                # Saving to CSV
-                Total_cost.to_csv('TotalCost.csv')
-                Time = Time + 1
-                break;
+    if (Month >= Summer_start and Month <= Summer_end and Month<=12 and Day >=0 and Day<=5):
+        
+        if(Time >= Summer_superpeak_start and Time>= Summer_superpeak_end):
+            Energyusage['Cost'] = Energyusage['Energy'] * Summer_superpeak_cost
 
-            case 3: Time > base and Time<= peak;
-                Totalenergycost = Energy_usage * Energycost['SUMpeak'];
-                Transmission_charge = 0.01 ; # should be modified by the user
-                TransmissionCost = Energy_usage * Transmission_charge;
-                Total_cost = TransmissionCost + Totalenergycost;
-                # Saving to CSV
-                Total_cost.to_csv('TotalCost.csv');
-                Time=Time+1;
-                break;
+        elif(Time >= Summer_peak_start and Time <= Summer_peak_end):
+              Energyusage['Cost'] = Energyusage['Energy'] * Summer_peak_cost
 
-            }
+        elif(Time >= Summer_midpeak_start and Time <= Summer_midpeak_end):
+              Energyusage['Cost'] = Energyusage['Energy'] * Summer_peak_cost
 
+        elif(Time >= Summer_base_start and Time <= Summer_base_end):
+              Energyusage['Cost']= Energyusage['Energy'] * Summer_base_cost
+            
+        elif(Time >= Summer_superbase_start and Time <= Summer_superbase_end):
+              Energyusage['Cost'] = Energyusage['Energy'] * Summer_superbase_cost
+        
+        else:
+            print("Re-Eneter values between 0-24 Error in summer months")
+        
+###############################################################################################################
+###############   WINTER CALC ##########################
+####################################################################################################
+    elif (Month < Summer_start and Month > Summer_end and Month<=12 and Day >=0 and Day<=5):
+         
+            
+        if(Time >= Winter_superpeak_start and Time>= Winter_superpeak_end):
+            Energyusage['Cost'] = Energyusage['Energy'] * Winter_superpeak_cost
 
-        }
-    return Total_cost
+        elif(Time >= Winter_peak_start and Time <= Winter_peak_end):
+              Energyusage['Cost'] = Energyusage['Energy'] * Winter_peak_cost
+
+        elif(Time >= Winter_midpeak_start and Time <= Winter_midpeak_end):
+              Energyusage['Cost'] = Energyusage['Energy'] * Winter_peak_cost
+
+        elif(Time >= Winter_base_start and Time <= Winter_base_end):
+              Energyusage['Cost']= Energyusage['Energy'] * Winter_base_cost
+            
+        elif(Time >= Winter_superbase_start and Time <= Winter_superbase_end):
+              Energyusage['Cost'] = Energyusage['Energy'] * Winter_superbase_cost
+        
+        else:
+            print("Re-Eneter values between 0-24, Error in Winter months months")
+            
+########################################## SUMMER WEEKENDS ###################################     
+       
+    elif (Day>=6 and Day<=7 and Month >= Summer_start and Month <= Summer_end and Month<=12):
+        
+        Energyusage['Cost'] = Energyusage['Energy'] * Summer_base_cost
+        
+################### WINTER WEEKENDS #########################################################
+
+    elif (Day>=6 and Day<=7 and Month < Summer_start and Month > Summer_end and Month<=12):
+        
+        Energyusage['Cost'] = Energyusage['Energy'] * Summer_base_cost
 
 ####################################
 # End of Fucntion
 #####################################
 
 #calling the function
-Energycalc['TotalCost'] = Load_Temp.apply(Energycost, axis=1, Energy_usage=Energyusage)
 
-print(Energycalc)
-##############################################################################
+Energycost.apply(Energycalc, axis=1, Energy_usage=Energyusage)
 
+Energycost.to_csv('Costperhour.csv')
+
+#################### TOTAL ENERGY USAGE FOR THE YEAR ##################
+
+Annual_cost = Energycost.sum('costperhour')
+
+
+Min_cost = Energycost.min('costperhour')
+
+
+Max_cost = Energycost.max('costperhour')
+
+print(Annual_cost ,' is the ANNUAL cost of electricity')
+
+print(Min_cost, 'is the minimum cost of energy for the timestamp' )
+
+print(Max_cost, ' is the maximum cost of energy for the timestamp')
 
 ##############################################################################
 # 4.h: Gas Cost Calculator FUnction
