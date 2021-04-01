@@ -44,37 +44,106 @@ from eatlib import * # import eatlib - the only library you'll ever need
 
 
 # 3: plot clean EAT data using plot_time - STABLE
-# # define paths and filenames
-# filepath_in = './DataCleaner Output Files/' # use output files from JH_CSV_DataCleaner
-# filepath_out = './Plots/'   # where the plot gets saved
-# file_name = '2019 CHP Raw Trend_OUT_Clean_Data' #name of the file w/o .csv suffix (used to conveniently name plots, but maybe not robust)
-#
-# df = pd.read_csv(filepath_in + file_name + '.csv') # read data into a DataFrame and print some info
-# print('\nDATA READ SUCCESSFULLY...\n')
-# print(df)
-#
-# # !!! drop the first column of data so timestamps are in column
-# df.drop(df.columns[0],axis=1,inplace=True)
-#
-# # call a function from eatlib to plot the data
-# print('calling plot_time function...')
-# fig = plot_time(df)
-# fig.write_html(filepath_out + file_name + '_Plot.html')   # write the plot to html so it's shareable
-# fig.show()
+# define paths and filenames
+filepath_in = './DataCleaner Output Files/' # use output files from JH_CSV_DataCleaner
+filepath_out = './Plots/'   # where the plot gets saved
+file_name = '2019 CHP Raw Trend_OUT_Clean_Data' #name of the file w/o .csv suffix (used to conveniently name plots, but maybe not robust)
 
+df = pd.read_csv(filepath_in + file_name + '.csv') # read data into a DataFrame and print some info
+print('\nDATA READ SUCCESSFULLY...\n')
+print(df)
+
+# !!! drop the first column of data so timestamps are in column
+df.drop(df.columns[0],axis=1,inplace=True)
+
+# call a function from eatlib to plot the data
+print('calling plot_time function...')
+fig = plot_time(df)
+fig.write_html(filepath_out + file_name + '_Plot.html')   # write the plot to html so it's shareable
+fig.show()
 
 
 ####################################################################################################################
 # SANDBOX
 
+# # 12: test os & random
+# example_data_path = './example data/'
+#
+# df = pd.read_csv(example_data_path + random.choice(os.listdir(example_data_path)))  # pick a random file from ./example_data
+# if df.columns[0] == 'Unnamed: 0':
+#     df.drop(df.columns[0], axis=1, inplace=True)  # !!! drop the first column of data so timestamps are in column
+# print('calling plot_time function...')
+# fig = plot_time(df)
+# st.subheader('Example Data:')
+# st.dataframe(df)
+# st.subheader('Example Point Trends:')
+# st.plotly_chart(fig, use_container_width=True)
+
+
+# # 11: test streamlit
+# import streamlit as st
+# import pandas as pd
+# import altair as alt
+#
+# @st.cache
+# def get_UN_data():
+#     AWS_BUCKET_URL = "https://streamlit-demo-data.s3-us-west-2.amazonaws.com"
+#     df = pd.read_csv(AWS_BUCKET_URL + "/agri.csv.gz")
+#     return df.set_index("Region")
+#
+# try:
+#     df = get_UN_data()
+#     countries = st.multiselect(
+#         "Choose countries", list(df.index), ["China", "United States of America"]
+#     )
+#     if not countries:
+#         st.error("Please select at least one country.")
+#     else:
+#         data = df.loc[countries]
+#         data /= 1000000.0
+#         st.write("### Gross Agricultural Production ($B)", data.sort_index())
+#
+#         data = data.T.reset_index()
+#         data = pd.melt(data, id_vars=["index"]).rename(
+#             columns={"index": "year", "value": "Gross Agricultural Product ($B)"}
+#         )
+#         chart = (
+#             alt.Chart(data)
+#             .mark_area(opacity=0.3)
+#             .encode(
+#                 x="year:T",
+#                 y=alt.Y("Gross Agricultural Product ($B):Q", stack=None),
+#                 color="Region:N",
+#             )
+#         )
+#         st.altair_chart(chart, use_container_width=True)
+# except urllib.error.URLError as e:
+#     st.error(
+#         """
+#         **This demo requires internet access.**
+#
+#         Connection error: %s
+#     """
+#         % e.reason
+#     )
+
+
+
+## 10: test out psychrochart
+# from psychrochart import PsychroChart
+# import matplotlib.pyplot as plt
+#
+# PsychroChart('minimal').plot(ax=plt.gca())
+# plt.show()
+
+
+
 # 9: try reading excel file
-root = './' # define path to sample data
-
-df = pd.read_excel(root + 'User Inputs 2.xlsx', sheet_name=1) # read data into a DataFrame and print some info
-print('\nDATA READ SUCCESSFULLY...\n')
-print(df)
-
-
+# root = './' # define path to sample data
+#
+# df = pd.read_excel(root + 'User Inputs 2.xlsx', sheet_name=2) # read data into a DataFrame and print some info
+# print('\nDATA READ SUCCESSFULLY...\n')
+# print(df)
 
 
 

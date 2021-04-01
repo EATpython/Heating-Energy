@@ -9,6 +9,9 @@
 ####################################################################################################################
 # IMPORTS
 
+import os
+import random
+import streamlit as st
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
@@ -100,6 +103,8 @@ def plot_time(df):
         #                    arrowhead=1)
 
     fig.update_layout(showlegend=True)    # force the legend for single-trace plots
+    fig.update_layout(legend_title_text='Points:')
+    fig.update_layout(hovermode='x')
     # fig.show()    # changed this to return a fig instead of plotting. can change back if we want.
     return fig
 #
