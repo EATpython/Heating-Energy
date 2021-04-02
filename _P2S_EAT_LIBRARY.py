@@ -294,7 +294,7 @@ def export_csv():
     return
 
 
-# export_csv()
+export_csv()
 
 # # ====================================================================================================
 # # >>>END OF SCRIPT<<<
@@ -341,7 +341,7 @@ tk.messagebox.showinfo('Status', 'HHW Calculation complete!')
 
 print('RESULTS:')
 print(calc_bldg_load_mbh().head())
-
+print()
 
 #################################################################################################################
 # 4.d : EquipmentDemand Function
@@ -364,6 +364,7 @@ Equipment = {'Quantity': 1, 'Size': 200, 'Turndown': 0.05}
 
 
 # *** Defining the calculation Function ***
+# def EquipmentDemand(row, Equipment):
 def EquipmentDemand(row, Equipment):
     EquipQuantity = Equipment['Quantity']
     EquipMax = Equipment['Size']
@@ -377,29 +378,31 @@ def EquipmentDemand(row, Equipment):
     return BoilerOut
 
 
-# =============================================================================
+# # =============================================================================
 # ***How to call this function ***
 # ***defining the data frames ***
 # temporary input data frame
 Load_Temp = abs(pd.DataFrame(data=LoadProfile['MBH']))  # converting back to Data frame
 # Todo: move into data cleaning section of script
 # output data frame
-EquipmentOutput = pd.DataFrame(columns=['EquipmentOutput'])
+EquipmentOutput = pd.DataFrame(columns=['Time', 'EquipmentOutput'])
 # Function Call
+EquipmentOutput['Time'] = LoadProfile['TIME']
 EquipmentOutput['EquipmentOutput'] = Load_Temp.apply(EquipmentDemand, axis=1, Equipment=Equipment)
 # saving to CSV, this can be eliminated
 # EquipmentOutput.to_csv('EquipmentOutput.csv')
 print()
 print(EquipmentOutput)
 print('End of 4.d : EquipmentDemand Function')
+print()
 #################################################################################################################
 
 
 #################################################################################################################
 # 4.e : Boiler Consumption Function
-## Libraries : Pandas as pd
-## Input DataPath, EquipmentOutput, Boiler
-## Outputs BoilerConsumption
+# Libraries : Pandas as pd
+# Input DataPath, EquipmentOutput, Boiler
+# Outputs BoilerConsumption
 
 # =============================================================================
 # *** User defined inputs ***
@@ -508,7 +511,7 @@ def Energycalc(Energycost,Energy_usage):
     ##############SUMMER CALC#################
 
     if (Month >= Summer_start and Month <= Summer_end and Month<=12 and Day >=0 and Day<=5):
-        
+
         if(Time >= Summer_superpeak_start and Time>= Summer_superpeak_end):
             Energyusage['Cost'] = Energyusage['Energy'] * Summer_superpeak_cost
 
@@ -520,19 +523,19 @@ def Energycalc(Energycost,Energy_usage):
 
         elif(Time >= Summer_base_start and Time <= Summer_base_end):
               Energyusage['Cost']= Energyusage['Energy'] * Summer_base_cost
-            
+
         elif(Time >= Summer_superbase_start and Time <= Summer_superbase_end):
               Energyusage['Cost'] = Energyusage['Energy'] * Summer_superbase_cost
-        
+
         else:
             print("Re-Eneter values between 0-24 Error in summer months")
-        
+
 ###############################################################################################################
 ###############   WINTER CALC ##########################
 ####################################################################################################
     elif (Month < Summer_start and Month > Summer_end and Month<=12 and Day >=0 and Day<=5):
-         
-            
+
+
         if(Time >= Winter_superpeak_start and Time>= Winter_superpeak_end):
             Energyusage['Cost'] = Energyusage['Energy'] * Winter_superpeak_cost
 
@@ -544,23 +547,23 @@ def Energycalc(Energycost,Energy_usage):
 
         elif(Time >= Winter_base_start and Time <= Winter_base_end):
               Energyusage['Cost']= Energyusage['Energy'] * Winter_base_cost
-            
+
         elif(Time >= Winter_superbase_start and Time <= Winter_superbase_end):
               Energyusage['Cost'] = Energyusage['Energy'] * Winter_superbase_cost
-        
+
         else:
             print("Re-Eneter values between 0-24, Error in Winter months months")
-            
-########################################## SUMMER WEEKENDS ###################################     
-       
+
+########################################## SUMMER WEEKENDS ###################################
+
     elif (Day>=6 and Day<=7 and Month >= Summer_start and Month <= Summer_end and Month<=12):
-        
+
         Energyusage['Cost'] = Energyusage['Energy'] * Summer_base_cost
-        
+
 ################### WINTER WEEKENDS #########################################################
 
     elif (Day>=6 and Day<=7 and Month < Summer_start and Month > Summer_end and Month<=12):
-        
+
         Energyusage['Cost'] = Energyusage['Energy'] * Summer_base_cost
 
 ####################################
@@ -716,7 +719,7 @@ def plot_x(df):
     ## Libraries : Pandas as pd
 ## Input : Pumps information {quantity, hp, MaxGPM, turndown, efficicnecy, *config }
 ## Outputs PumpKw
-    
+
 #define a class for pumps, maybe we want this in a function and read all the classes at once
 class Pump:
     def __init__(self, quantity, HP, MaxGPM, turndown, efficiency):
@@ -725,7 +728,7 @@ class Pump:
         self.MaxGPM = MaxGPM
         self.turndown = turndown
         self.efficiency = efficiency
-   
+
 # =============================================================================
 # I defined the pump variables here, but we would like this to be read from a file
 
@@ -736,10 +739,10 @@ print(CHWP1.__dict__)
 # =============================================================================
 #here i am reading the excel file directly, but later we have to just read the correct column in the clean data
 data_path = 'C:/Users\Taraneh/Documents/GitHub/Heating-Energy/Inputs'
- 
+
 Data = pd.read_csv(data_path + '/2019 CHP Raw Trend.CSV', index_col=0)
 
-#just picking the column i want for now 
+#just picking the column i want for now
 
 flow =pd.DataFrame ( data = Data['CHP Flow'] )
 
@@ -748,9 +751,9 @@ flow =pd.DataFrame ( data = Data['CHP Flow'] )
 def PumpConsumption(row, pump):
     GPM = pump.MaxGPM
     TD = pump.turndown
-    HP = pump.HP 
+    HP = pump.HP
     if row['CHP Flow'] > (GPM * TD/100) :
-        power = ((row['CHP Flow']/ GPM)**3) * HP 
+        power = ((row['CHP Flow']/ GPM)**3) * HP
     else:
         power = 0
     return power
@@ -759,6 +762,6 @@ def PumpConsumption(row, pump):
 PumpKw = pd.DataFrame(columns=['Pump Consumption'])
 
 # =============================================================================
-#Function Call 
+#Function Call
 
 PumpKw['Pump Consumption'] = flow.apply(PumpConsumption , axis = 1, pump = CHWP1)
