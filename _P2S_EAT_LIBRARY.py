@@ -364,7 +364,6 @@ Equipment = {'Quantity': 1, 'Size': 200, 'Turndown': 0.05}
 
 
 # *** Defining the calculation Function ***
-# def EquipmentDemand(row, Equipment):
 def EquipmentDemand(row, Equipment):
     EquipQuantity = Equipment['Quantity']
     EquipMax = Equipment['Size']
