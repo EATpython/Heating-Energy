@@ -364,31 +364,31 @@ Equipment = {'Quantity': 1, 'Size': 200, 'Turndown': 0.05}
 
 
 # *** Defining the calculation Function ***
-def EquipmentDemand(row, Equipment):
+ 
+def EquipmentDemand(row , Equipment ):
+    
     EquipQuantity = Equipment['Quantity']
-    EquipMax = Equipment['Size']
+    EquipMax = Equipment['Size'] 
     EquipTD = Equipment['Turndown']
-
-    if row['MBH'] > EquipMax * EquipTD:
-        BoilerOut = min(row['MBH'], EquipMax * EquipQuantity)
+    title = 'HWLoad'
+    if abs(row[title]) > EquipMax * EquipTD  : 
+        EquipmentOut = min ( abs(row[title]) , EquipMax * EquipQuantity )
     else:
-        BoilerOut = 0
+        EquipmentOut = 0 
 
-    return BoilerOut
+    return EquipmentOut
 
 
 # =============================================================================
 # ***How to call this function ***
-# ***defining the data frames ***
-# temporary input data frame
-Load_Temp = abs(pd.DataFrame(data=LoadProfile['MBH']))  # converting back to Data frame
-# Todo: move into data cleaning section of script
-# output data frame
-EquipmentOutput = pd.DataFrame(columns=['EquipmentOutput'])
-# Function Call
-EquipmentOutput['EquipmentOutput'] = Load_Temp.apply(EquipmentDemand, axis=1, Equipment=Equipment)
-# saving to CSV, this can be eliminated
-# EquipmentOutput.to_csv('EquipmentOutput.csv')
+#output data fram 
+EquipmentOutput = pd.DataFrame()
+
+# =============================================================================
+#Function Call 
+EquipmentOutput['TIME'] = LoadProfile['Timestamp']
+EquipmentOutput['EquipmentOutput'] = LoadProfile.apply(EquipmentDemand, axis = 1 , Equipment = Equipment)
+
 print()
 print(EquipmentOutput)
 print('End of 4.d : EquipmentDemand Function')
