@@ -344,7 +344,7 @@ print(calc_bldg_load_mbh().head())
 
 
 #################################################################################################################
-# 4.d : EquipmentDemand Function
+# 4.d : EquipmentDemand Function  right now not utilizing this but this needs to be implemented inside of other chiller adn boiler functions 
 ## Libraries : Pandas as pd
 ## Input : LoadProfile, data_path, Equipment
 ## df variable pulled from calc_bldg_load_mbh function. Returns clean dataset.
@@ -356,40 +356,38 @@ LoadProfile = calc_bldg_load_mbh()  # returns dataframe 'df' values
 # =============================================================================
 # *** User defined inputs ***
 
-Equipment = {'Quantity': 1, 'Size': 200, 'Turndown': 0.05}
+TestEquipment = {'Quantity': 1, 'Size': 200, 'Turndown': 0.05}
 # Todo create popup to allow for user input
 
 # =============================================================================
 # Todo : Unmet hours count , so you can after 10 of unmet hours run at turn done 1 time
 
-
 # *** Defining the calculation Function ***
-def EquipmentDemand(row, Equipment):
+def EquipmentDemand(row , title, Equipment ):
+    title = title 
     EquipQuantity = Equipment['Quantity']
-    EquipMax = Equipment['Size']
+    EquipMax = Equipment['Size'] 
     EquipTD = Equipment['Turndown']
-
-    if row['MBH'] > EquipMax * EquipTD:
-        BoilerOut = min(row['MBH'], EquipMax * EquipQuantity)
+    
+    if abs(row[title]) > EquipMax * EquipTD  : 
+        EquipmentOut = min ( abs(row[title]) , EquipMax * EquipQuantity )
     else:
-        BoilerOut = 0
+        EquipmentOut = 0 
 
-    return BoilerOut
-
+    return EquipmentOut
 
 # =============================================================================
 # ***How to call this function ***
-# ***defining the data frames ***
-# temporary input data frame
-Load_Temp = abs(pd.DataFrame(data=LoadProfile['MBH']))  # converting back to Data frame
-# Todo: move into data cleaning section of script
-# output data frame
-EquipmentOutput = pd.DataFrame(columns=['EquipmentOutput'])
-# Function Call
-EquipmentOutput['EquipmentOutput'] = Load_Temp.apply(EquipmentDemand, axis=1, Equipment=Equipment)
-# saving to CSV, this can be eliminated
-# EquipmentOutput.to_csv('EquipmentOutput.csv')
-print()
+# ***defining the data frames for output  ***
+
+ ##this is a place holder for how we select which column to do calcs on 
+EquipmentOutput = pd.DataFrame()
+
+#Function Call 
+EquipmentOutput['TIME'] = LoadProfile['Timestamp']
+EquipmentOutput['EquipmentOutput'] = LoadProfile.apply(EquipmentDemand, title = 'MBH', axis = 1 , Equipment = TestEquipment)
+## title in the call above is a place holder for how we select which column to do calcs on 
+
 print(EquipmentOutput)
 print('End of 4.d : EquipmentDemand Function')
 #################################################################################################################
@@ -404,28 +402,38 @@ print('End of 4.d : EquipmentDemand Function')
 # =============================================================================
 # *** User defined inputs ***
 
-Boiler = {'Efficiency': 0.8, 'Type': 'Gas'}
+#define a class for my boiler, maybe we want this in a function and read all the classes at once
+class Boiler:
+    def __init__(self, quantity, capacityMBH, turndown, efficiency): 
+        self.quantity = quantity
+        self.CapacityMBH = CapacityMBH
+        self.turndown = turndown # number in percent. like 10
+        self.efficiency = efficiency #just the number like 81
+#Create a test boiler
+TestBoiler = Boiler (1,200,10,81)
+
 # Todo create popup to a lot for user input
 
 # =============================================================================
 # *** Defining the calculation Function ***
 
-def BoilerInput(row, Boiler):
-    BoilerEfficiency = Boiler['Efficiency']
-    return row['EquipmentOutput'] * BoilerEfficiency
-
+def BoilerInput(row, title, Boiler):
+    title = title
+    BoilerEfficiency = Boiler.efficiency
+    return row[title] * BoilerEfficiency/100
 
 # =============================================================================
 # ***How to call this function ***
 
-BoilerConsumption = pd.DataFrame(columns=['BoilerInput'])
 
-BoilerConsumption['BoilerInput'] = EquipmentOutput.apply(BoilerInput, axis=1, Boiler=Boiler)
+BoilerConsumption = pd.DataFrame()
+BoilerConsumption['TIME'] = EquipmentOutput['TIME']
+BoilerConsumption['BoilerInput'] = EquipmentOutput.apply(BoilerInput, title = 'MBH', axis=1, Boiler=TestBoiler)
+## title in the call above is a place holder for how we select which column to do calcs on 
 
-BoilerAnnualConsumption = BoilerConsumption.sum(axis=0)
+print(BoilerConsumption)
+print('End of 4.e : BoilerInput Function')
 
-BoilerAnnualTherms = BoilerAnnualConsumption / 1000
-# Todo: simplify code through the use of dataframes to perform iteration in lieu of using .apply method
 ##############################################################################
 
 
@@ -437,16 +445,21 @@ BoilerAnnualTherms = BoilerAnnualConsumption / 1000
 ## Outputs R, ChillerKw
 # =============================================================================
 
+#define a class for my Chiller, maybe we want this in a function and read all the classes at once
+class Chiller:
+    def __init__(self, quantity, capacityMBH, turndown): 
+        self.quantity = quantity
+        self.CapacityMBH = CapacityMBH
+        self.turndown = turndown # number in percent. like 10
+#Create a test boiler
+TestChiller = Chiller (1,150,10)
+
 # =============================================================================
-# Here we define the chiller tons and kw s but its user input in future
+# Here we define the chiller tons and kw s but its user input in future, we have to read this from CSV 
 tons = np.array([200, 180, 160, 140, 120, 100, 80, 60, 48])
 kws = np.array([236.10, 191.70, 157.20, 131.20, 105.70, 80.02, 59.81, 47.39, 41.89])
 n = 6  # need to find R value to optimize this
 # =============================================================================
-
-# =============================================================================
-# this should come from other section of code
-Load_CHW = pd.DataFrame([236.1, 60, 70, 66])
 
 # =============================================================================
 # Method 2 : Calculate the polynomial and sending the polynomial out
@@ -463,8 +476,8 @@ def ChillerConsumption(Load, curveTons, curveKws):
 
 
 # how to call this function
-
-ChillerKwConsumption = pd.DataFrame(ChillerConsumption(Load=Load_CHW, curveTons=tons, curveKws=kws))
+title = 'CHWLoad' # this is where we select which column to use 
+ChillerKwConsumption = pd.DataFrame(ChillerConsumption(Load = Load[title], curveTons=tons, curveKws=kws))
 
 # =============================================================================
 ##############################################################################
