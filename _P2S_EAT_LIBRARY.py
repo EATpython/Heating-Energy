@@ -326,17 +326,24 @@ def calc_bldg_load_mbh():
 
     # Todo: establish standard naming scheme for header labels
     results['TIME'] = df['TIME']
-    results['HHWS_TEMP'] = df['CHP_HHWS_TEMP']
-    results['HHWR_TEMP'] = df['CHP_HHWR_TEMP']
-    results['FLOW'] = df['CHP_FLOW']
+    results['HHWS_TEMP'] = df['UVO_HHWS_TEMP']
+    results['HHWR_TEMP'] = df['UVO_HHWR_TEMP']
+    results['HHWFLOW'] = df['UVO_HHW_RET_FLOW']
+    results['CHWS_TEMP'] = df['UVO_CHWS_TEMP']
+    results['CHWR_TEMP'] = df['UVO_CHWR_TEMP']
+    results['CHWFLOW'] = df['UVO_CHW_RET_FLOW']
 
-    results['MBH'] = (500 * (results['HHWS_TEMP'] - results['HHWR_TEMP'])
-                      * results['FLOW'] / 1000).__round__(2)
+
+    results['HHWMBH'] = (500 * (results['HHWS_TEMP'] - results['HHWR_TEMP'])
+                      * results['HHWFLOW'] / 1000).__round__(2)
+    
+    #ToDo need to do the same fofr chiller water for now 
+    
     results.to_csv(csv_file.replace('.csv', '_OUT_0_HHW Calc.csv'))
     return results
 
 
-tk.messagebox.showinfo('Status', 'HHW Calculation complete!')
+tk.messagebox.showinfo('Status', ' Calculation complete!')
 
 
 print('RESULTS:')
@@ -384,8 +391,8 @@ def EquipmentDemand(row , title, Equipment ):
 EquipmentOutput = pd.DataFrame()
 
 #Function Call 
-EquipmentOutput['TIME'] = LoadProfile['Timestamp']
-EquipmentOutput['EquipmentOutput'] = LoadProfile.apply(EquipmentDemand, title = 'MBH', axis = 1 , Equipment = TestEquipment)
+EquipmentOutput['TIME'] = LoadProfile['TIME']
+EquipmentOutput['EquipmentOutput'] = LoadProfile.apply(EquipmentDemand, title = 'HHWMBH', axis = 1 , Equipment = TestEquipment)
 ## title in the call above is a place holder for how we select which column to do calcs on 
 
 print(EquipmentOutput)
@@ -406,7 +413,7 @@ print('End of 4.d : EquipmentDemand Function')
 class Boiler:
     def __init__(self, quantity, capacityMBH, turndown, efficiency): 
         self.quantity = quantity
-        self.CapacityMBH = CapacityMBH
+        self.capacityMBH = capacityMBH
         self.turndown = turndown # number in percent. like 10
         self.efficiency = efficiency #just the number like 81
 #Create a test boiler
@@ -418,7 +425,7 @@ TestBoiler = Boiler (1,200,10,81)
 # *** Defining the calculation Function ***
 
 def BoilerInput(row, title, Boiler):
-    title = title
+    title = title 
     BoilerEfficiency = Boiler.efficiency
     return row[title] * BoilerEfficiency/100
 
@@ -427,8 +434,8 @@ def BoilerInput(row, title, Boiler):
 
 
 BoilerConsumption = pd.DataFrame()
-BoilerConsumption['TIME'] = EquipmentOutput['TIME']
-BoilerConsumption['BoilerInput'] = EquipmentOutput.apply(BoilerInput, title = 'MBH', axis=1, Boiler=TestBoiler)
+BoilerConsumption['TIME'] = LoadProfile['TIME']
+BoilerConsumption['BoilerInput'] = LoadProfile.apply(BoilerInput, title = 'HHWMBH', axis=1, Boiler=TestBoiler)
 ## title in the call above is a place holder for how we select which column to do calcs on 
 
 print(BoilerConsumption)
@@ -449,7 +456,7 @@ print('End of 4.e : BoilerInput Function')
 class Chiller:
     def __init__(self, quantity, capacityMBH, turndown): 
         self.quantity = quantity
-        self.CapacityMBH = CapacityMBH
+        self.capacityMBH = capacityMBH
         self.turndown = turndown # number in percent. like 10
 #Create a test boiler
 TestChiller = Chiller (1,150,10)
@@ -476,8 +483,15 @@ def ChillerConsumption(Load, curveTons, curveKws):
 
 
 # how to call this function
-title = 'CHWLoad' # this is where we select which column to use 
-ChillerKwConsumption = pd.DataFrame(ChillerConsumption(Load = Load[title], curveTons=tons, curveKws=kws))
+ChillerKwConsumption = pd.DataFrame()
+ChillerKwConsumption['TIME'] = LoadProfile['TIME']
+title = 'HHWMBH' # this is where we select which column to use 
+ChillerKwConsumption['Chiller_KW'] = pd.DataFrame(ChillerConsumption(LoadProfile[title], curveTons=tons, curveKws=kws))
+
+
+print(BoilerConsumption)
+print('End of 4.f : ChillerConsumption Function')
+
 
 # =============================================================================
 ##############################################################################
