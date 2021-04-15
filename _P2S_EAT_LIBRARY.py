@@ -504,33 +504,79 @@ print('End of 4.f : ChillerConsumption Function')
 # import numpy as np
 
 # kw data imported fro Tara's section
+
 Energyusage = EquipmentDemand
 Energycost= pd.DataFrame(columns=['Costofenergy'])
-Energycost = fill_empty_fields()
+
 
 
 ####################################
 # Calculation inside the fuction
 #####################################
 def Energycalc(Energycost,Energy_usage):
-    Summer_start, Summer_end = input("Enter Summer start and end months").split()
-    Summer_superpeak_start, Summer_superpeak_end, Summer_superpeak_cost = input("Enter Summer superpeak start hour, end hour and Cost per kwh respectively").split()
-    Summer_peak_start, Summer_peak_end, Summer_peak_cost = input("Enter Summer peak start hour, end hour and Cost per kwh respectively").split()
-    Summer_midpeak_start, Summer_midpeak_end, Summer_midpeak_cost = input("Ener Summer midpeak start hour, end hour and Cost per kwh respectively").split()
-    Summer_base_start, Summer_base_end, Summer_base_cost = input("Enter summer Base start hour, end hour and Cost per kwh respectively").split()
-    Summer_superbase_start, Summer_superbase_end, Summer_superbase_cost = input("Enter summer Superbase start hour, end hour and Cost per kwh respectively").split()
-    # WINTER IS COMING##########
-    Winter_superpeak_start, Winter_superpeak_end, Winter_superpeak_cost = input("Enter Winter superpeak start hour, end hour and Cost per kwh respectively").split()
-    Winter_peak_start, Winter_peak_end, Winter_peak_cost = input("Enter Winter peak start hour, end hour and Cost per kwh respectively").split()
-    Winter_midpeak_start, Winter_midpeak_end, Winter_midpeak_cost = input("Ener Winter midpeak start hour, end hour and Cost per kwh respectively").split()
-    Winter_base_start, Winter_base_end, Winter_base_cost = input("Enter Winter Base start hour, end hour and Cost per kwh respectively").split()
-    Winter_superbase_start, Winter_superbase_end, Winter_superbase_cost = input("Enter Winter Superbase start hour, end hour and Cost per kwh respectively").split()
+    
+    from openpyxl import load_workbook
+    wb = load_workbook(filename="User Inputs.xlsx")
+    sheet = wb['Sheet1']
+    
+    ##################################SUMMER VALUES #############################
+    
+    Summer_start = sheet['AE25'].value 
+    Summer_end = sheet['AE26'].value
+    Summer_superpeak_start = sheet['AE9'].value
+    Summer_superpeak_end = sheet['AF9'].value
+    Summer_superpeak_cost = sheet['AG9'].value
+    Summer_peak_start = sheet['AE10'].value
+    Summer_peak_end = sheet['AF10'].value
+    Summer_peak_cost = sheet['AG10'].value
+    Summer_midpeak_start = sheet['AE11'].value
+    Summer_midpeak_end = sheet['AF11'].value
+    Summer_midpeak_cost = sheet['AG11'].value
+    Summer_base_start = sheet['AE12'].value
+    Summer_base_end = sheet['AF12'].value
+    Summer_base_cost = sheet['AG12'].value
+    Summer_superbase_start = sheet['AE13'].value
+    Summer_superbase_end = sheet['AF13'].value
+    Summer_superbase_cost = sheet['AG13'].value
+   
+    ############################ WINTER VALUES ###################
+    
+    Winter_superpeak_start = sheet['AE18'].value
+    Winter_superpeak_end = sheet['AF18'].value
+    Winter_superpeak_cost = sheet['AG18'].value
+    Winter_peak_start = sheet['AE19'].value
+    Winter_peak_end = sheet['AF19'].value
+    Winter_peak_cost = sheet['AG19'].value
+    Winter_midpeak_start = sheet['AE20'].value
+    Winter_midpeak_end = sheet['AF20'].value
+    Winter_midpeak_cost = sheet['AG20'].value
+    Winter_base_start = sheet['AE21'].value
+    Winter_base_end = sheet['AF21'].value
+    Winter_base_cost = sheet['AG21'].value
+    Winter_superbase_start = sheet['AE22'].value
+    Winter_superbase_end = sheet['AF22'].value
+    Winter_superbase_cost = sheet['AG22'].value
+
+    
+    
+    # #Summer_start, Summer_end = input("Enter Summer start and end months").split()
+    # Summer_superpeak_start, Summer_superpeak_end, Summer_superpeak_cost = input("Enter Summer superpeak start hour, end hour and Cost per kwh respectively").split()
+    # Summer_peak_start, Summer_peak_end, Summer_peak_cost = input("Enter Summer peak start hour, end hour and Cost per kwh respectively").split()
+    # Summer_midpeak_start, Summer_midpeak_end, Summer_midpeak_cost = input("Ener Summer midpeak start hour, end hour and Cost per kwh respectively").split()
+    # Summer_base_start, Summer_base_end, Summer_base_cost = input("Enter summer Base start hour, end hour and Cost per kwh respectively").split()
+    # Summer_superbase_start, Summer_superbase_end, Summer_superbase_cost = input("Enter summer Superbase start hour, end hour and Cost per kwh respectively").split()
+    # # WINTER IS COMING##########
+    # Winter_superpeak_start, Winter_superpeak_end, Winter_superpeak_cost = input("Enter Winter superpeak start hour, end hour and Cost per kwh respectively").split()
+    # Winter_peak_start, Winter_peak_end, Winter_peak_cost = input("Enter Winter peak start hour, end hour and Cost per kwh respectively").split()
+    # Winter_midpeak_start, Winter_midpeak_end, Winter_midpeak_cost = input("Ener Winter midpeak start hour, end hour and Cost per kwh respectively").split()
+    # Winter_base_start, Winter_base_end, Winter_base_cost = input("Enter Winter Base start hour, end hour and Cost per kwh respectively").split()
+    # Winter_superbase_start, Winter_superbase_end, Winter_superbase_cost = input("Enter Winter Superbase start hour, end hour and Cost per kwh respectively").split()
 
     # TRANSFER TDM DATA TO VARIABLES
-
-    Time = Energyusage['Time']
-    Day = Energyusage['Day']
-    Month = Energyusage['Month']
+    
+    Time = Energyusage['Time'].dt.hour
+    Day = Energyusage['Time'].dt.day
+    Month = Energyusage['Time'].dt.month
 
     ##############SUMMER CALC#################
 
@@ -543,7 +589,7 @@ def Energycalc(Energycost,Energy_usage):
               Energyusage['Cost'] = Energyusage['Energy'] * Summer_peak_cost
 
         elif(Time >= Summer_midpeak_start and Time <= Summer_midpeak_end):
-              Energyusage['Cost'] = Energyusage['Energy'] * Summer_peak_cost
+              Energyusage['Cost'] = Energyusage['Energy'] * Summer_midpeak_cost
 
         elif(Time >= Summer_base_start and Time <= Summer_base_end):
               Energyusage['Cost']= Energyusage['Energy'] * Summer_base_cost
@@ -567,7 +613,7 @@ def Energycalc(Energycost,Energy_usage):
               Energyusage['Cost'] = Energyusage['Energy'] * Winter_peak_cost
 
         elif(Time >= Winter_midpeak_start and Time <= Winter_midpeak_end):
-              Energyusage['Cost'] = Energyusage['Energy'] * Winter_peak_cost
+              Energyusage['Cost'] = Energyusage['Energy'] * Winter_midpeak_cost
 
         elif(Time >= Winter_base_start and Time <= Winter_base_end):
               Energyusage['Cost']= Energyusage['Energy'] * Winter_base_cost
@@ -589,6 +635,8 @@ def Energycalc(Energycost,Energy_usage):
     elif (Day>=6 and Day<=7 and Month < Summer_start and Month > Summer_end and Month<=12):
         
         Energyusage['Cost'] = Energyusage['Energy'] * Summer_base_cost
+        
+#############################################################################################
 
 ####################################
 # End of Fucntion
