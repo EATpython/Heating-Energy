@@ -12,6 +12,7 @@ from tkinter import filedialog
 from tkinter import messagebox
 from scipy.optimize import curve_fit
 from matplotlib import pyplot as plt
+from openpyxl import load_workbook
 
 # Step 2 - Lets Define all the User Inputs Required
 
@@ -331,12 +332,15 @@ def calc_bldg_load_mbh():
     results['HHWFLOW'] = df['UVO_HHW_RET_FLOW']
     results['CHWS_TEMP'] = df['UVO_CHWS_TEMP']
     results['CHWR_TEMP'] = df['UVO_CHWR_TEMP']
-    results['CHWFLOW'] = df['UVO_CHW_RET_FLOW']
+    results['CHWFLOW'] = df['UVO_CHW_RET_FLOW'].str.replace(",", "").astype(float)
 
 
     results['HHWMBH'] = (500 * (results['HHWS_TEMP'] - results['HHWR_TEMP'])
                       * results['HHWFLOW'] / 1000).__round__(2)
-    
+
+    results['CHWMBH'] = (500 * (results['CHWS_TEMP'] - results['CHWR_TEMP'])
+                      * results['CHWFLOW'] / 1000).__round__(2)
+
     #ToDo need to do the same fofr chiller water for now 
     
     results.to_csv(csv_file.replace('.csv', '_OUT_0_HHW Calc.csv'))
@@ -376,8 +380,8 @@ def EquipmentDemand(row , title, Equipment ):
     EquipMax = Equipment['Size'] 
     EquipTD = Equipment['Turndown']
     
-    if abs(row[title]) > EquipMax * EquipTD  : 
-        EquipmentOut = min ( abs(row[title]) , EquipMax * EquipQuantity )
+    if abs(row[title]) > EquipMax * EquipTD:
+        EquipmentOut = min(abs(row[title]), EquipMax * EquipQuantity )
     else:
         EquipmentOut = 0 
 
@@ -505,7 +509,7 @@ print('End of 4.f : ChillerConsumption Function')
 
 # kw data imported fro Tara's section
 
-Energyusage = EquipmentDemand
+Energyusage = EquipmentOutput
 Energycost= pd.DataFrame(columns=['Costofenergy'])
 
 
@@ -513,10 +517,9 @@ Energycost= pd.DataFrame(columns=['Costofenergy'])
 ####################################
 # Calculation inside the fuction
 #####################################
-def Energycalc(Energycost,Energy_usage):
+def Energycalc(Energycost, Energy_usage):
     
-    from openpyxl import load_workbook
-    wb = load_workbook(filename="User Inputs.xlsx")
+    wb = load_workbook(filename="User Inputs 2.xlsx")
     sheet = wb['Sheet1']
     
     ##################################SUMMER VALUES #############################
@@ -598,7 +601,7 @@ def Energycalc(Energycost,Energy_usage):
               Energyusage['Cost'] = Energyusage['Energy'] * Summer_superbase_cost
         
         else:
-            print("Re-Eneter values between 0-24 Error in summer months")
+            print("Re-Enter values between 0-24 Error in summer months")
         
 ###############################################################################################################
 ###############   WINTER CALC ##########################
@@ -622,7 +625,7 @@ def Energycalc(Energycost,Energy_usage):
               Energyusage['Cost'] = Energyusage['Energy'] * Winter_superbase_cost
         
         else:
-            print("Re-Eneter values between 0-24, Error in Winter months months")
+            print("Re-Enter values between 0-24, Error in Winter months months")
             
 ########################################## SUMMER WEEKENDS ###################################     
        
@@ -646,23 +649,21 @@ def Energycalc(Energycost,Energy_usage):
 
 Energycost.apply(Energycalc, axis=1, Energy_usage=Energyusage)
 
-Energycost.to_csv('Costperhour.csv')
+Energycost.to_csv('Costofenergy.csv')
 
 #################### TOTAL ENERGY USAGE FOR THE YEAR ##################
-
-Annual_cost = Energycost.sum('costperhour')
-
-
-Min_cost = Energycost.min('costperhour')
-
-
-Max_cost = Energycost.max('costperhour')
-
-print(Annual_cost ,' is the ANNUAL cost of electricity')
-
-print(Min_cost, 'is the minimum cost of energy for the timestamp' )
-
-print(Max_cost, ' is the maximum cost of energy for the timestamp')
+# Todo: troubleshoot area below:
+# Annual_cost = Energycost.sum()
+#
+# Min_cost = Energycost.min()
+#
+# Max_cost = Energycost.max()
+#
+# print(Annual_cost, ' is the ANNUAL cost of electricity')
+#
+# print(Min_cost, 'is the minimum cost of energy for the timestamp')
+#
+# print(Max_cost, ' is the maximum cost of energy for the timestamp')
 
 ##############################################################################
 # 4.h: Gas Cost Calculator FUnction
