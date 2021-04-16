@@ -1,9 +1,9 @@
 [theme]
-#P2S Inc Blue: 3B6D89
-#P2S Eng Teal: 00C496
-#P2S Cx Light Blue: 009CCD
-#P2S Cm Orange: FB9A2D
-#Black: 000000
+#P2S Inc Blue: 3B6D89, rgb(59, 109, 137)
+#P2S Eng Teal: 00C496, rgb(0, 196, 150)
+#P2S Cx Light Blue: 009CCD, rgb(0, 156, 205)
+#P2S Cm Orange: FB9A2D, rgb(251, 154, 45)
+#Black: 000000, rgb(0, 0, 0)
 primaryColor="00C496"
 backgroundColor="#FFFFFF"
 secondaryBackgroundColor="#F0F2F6"
