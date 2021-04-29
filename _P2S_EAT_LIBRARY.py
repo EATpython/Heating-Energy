@@ -69,6 +69,7 @@ def open_csv_file():
 csv_file = open_csv_file()
 font = ("Verdana", 8)
 revised_headers = []
+formatted_headers = []
 
 
 def read_csv():
@@ -113,30 +114,31 @@ class UserInputsApp:
         df = format_data_headers()
         header_lst = df.columns
         self.user_inputs = []
+        self.user_inputs_sel = []
         self.bldg_prefix = ""
         self.myParent = parent
 
         self.myContainer1 = tk.Frame(parent, relief=tk.SUNKEN, borderwidth=4, *args, **kwargs)
         self.myContainer1.grid(padx=5, pady=5)
-
         self.myContainer2 = tk.Frame(parent, relief=tk.FLAT, borderwidth=4, *args, **kwargs)
         self.myContainer2.grid(padx=5, pady=5)
 
         self.label_entry1 = tk.Label(self.myContainer1, text="SAMPLE NAME:", font=font)
         self.label_entry1.grid(row=2, column=0, sticky='nsew')
-
         self.label_entry2 = tk.Label(self.myContainer1, text="[ BLDG ] _ [ EQUP TYPE ] _ [ EQUP NO. ] _ [ SYS ]",
                                      width=41, font=font)
         self.label_entry2.grid(row=2, column=1, sticky='nsew')
 
-        for idx, text in enumerate(header_lst):
-            self.label2 = tk.Label(self.myContainer1, text=text, width=25, font=font)
-            self.label2.grid(row=idx + 3, column=0, sticky='e')
-
+        for idx, text in enumerate(header_lst, 1):
             self.preset = tk.StringVar(root, value=text)
             self.entry2 = tk.Entry(self.myContainer1, width=40, textvariable=self.preset)
             self.entry2.grid(row=idx + 3, column=1, sticky='nsew')
             self.user_inputs.append(self.entry2)
+
+            self.chkValue = tk.IntVar(root, value=1)
+            self.chkBtn = tk.Checkbutton(self.myContainer1, text=text, variable=self.chkValue)
+            self.chkBtn.grid(row=idx + 3, column=0, sticky='w')
+            self.user_inputs_sel.append(self.chkValue)
 
         self.button2 = tk.Button(self.myContainer2, text="Submit", width=10, font=font,
                                  activebackground='grey', activeforeground='blue')
@@ -148,8 +150,35 @@ class UserInputsApp:
         self.button3.grid(row=0, column=2, sticky='nsew')
 
     def get_values(self, event):
+        temp_lst_1 = []
+        temp_lst_2 = []
+
+        df = format_data_headers().copy()
+        formatted_headers_temp = list(df.columns)
+
+        for chkValue in self.user_inputs_sel:
+            temp_lst_1.append(chkValue.get())
+
         for entry in self.user_inputs:
-            revised_headers.append(entry.get())
+            temp_lst_2.append(entry.get())
+
+        lst_zip = zip(temp_lst_1, temp_lst_2, formatted_headers_temp)
+        zipped_list = list(lst_zip)
+
+        i = 0
+        while i < len(zipped_list):
+            if zipped_list[i][0] == 1:
+                revised_headers.append(zipped_list[i][1])
+                formatted_headers.append(zipped_list[i][2])
+                i += 1
+            else:
+                i += 1
+                pass
+
+        print("ORIGINAL COLUMN NAMES: ")
+        print(formatted_headers)
+        print("USER DEFINED COLUMN NAMES: ")
+        print(revised_headers)
         self.myParent.quit()
 
     def close_wind(self, event):
@@ -158,9 +187,8 @@ class UserInputsApp:
 
 if __name__ == "__main__":
     root = tk.Tk()
-    user_inputs = []
     root.wm_title('Header Names')
-    root.geometry("500x400")
+    root.geometry("500x500")
     UserInputsApp(root)
     root.mainloop()
     root.destroy()
@@ -178,17 +206,18 @@ if __name__ == "__main__":
 
 def consec_miss_data():
     df = format_data_headers()
-    df.columns = revised_headers
+    df1 = df[formatted_headers]
+    df1.columns = revised_headers
     df_md_ind = pd.DataFrame()
     df_md_ind_results = pd.DataFrame()
 
     counter = 0
-    header_main = list(df.columns)
-    header_count = len(df.columns)
+    header_main = list(df1.columns)
+    header_count = len(df1.columns)
 
     while counter < header_count:
         lst_temp = []
-        df_temp = df.copy()
+        df_temp = df1.copy()
 
         df_temp['Group'] = df_temp[header_main[counter]].notnull().astype(int).cumsum()
         df_temp = df_temp[df_temp[header_main[counter]].isnull()]
@@ -211,7 +240,7 @@ def consec_miss_data():
     df_md_ind.drop(['Group', 'Count'], axis=1, inplace=True)
 
     # print('CONSECUTIVE MISSING DATA REVIEW COMPLETE')
-    return df_md_ind_results, df_md_ind, df
+    return df_md_ind_results, df_md_ind, df1
 
 
 # print()
