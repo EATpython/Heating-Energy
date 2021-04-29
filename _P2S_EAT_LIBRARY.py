@@ -20,9 +20,57 @@ from openpyxl import load_workbook
 
 
 #################################################################################################################
-# Step 4 - Lets Create all the functions 
-## Input
-## Outputs 
+# Step 4 - Define all the equipment Classes:
+
+# define a class for my boiler, maybe we want this in a function and read all the classes at once
+class Boiler:
+    def __init__(self, quantity, capacityMBH, turndown, efficiency):
+        self.quantity = quantity
+        self.capacityMBH = capacityMBH
+        self.turndown = turndown  # number in percent. like 10
+        self.efficiency = efficiency  # just the number like 81
+        
+
+
+# define a class for my Chiller, maybe we want this in a function and read all the classes at once
+class Chiller:
+    def __init__(self, quantity, capacityMBH, turndown):
+        self.quantity = quantity
+        self.capacityMBH = capacityMBH
+        self.turndown = turndown  # number in percent. like 10
+        
+# define a class for pumps, maybe we want this in a function and read all the classes at once
+class Pump:
+    def __init__(self, quantity, HP, MaxGPM, turndown, efficiency):
+        self.quantity = quantity
+        self.HP = HP
+        self.MaxGPM = MaxGPM
+        self.turndown = turndown
+        self.efficiency = efficiency
+
+
+# =============================================================================
+# I defined the pump variables here, but we would like this to be read from a file
+
+
+# Create a test boiler
+TestBoiler = Boiler(1, 7000, 10, 81)
+
+CHWP1 = Pump(1, 10, 40, 10, 90)
+print(CHWP1.__dict__)
+
+
+# Create a test Chiller
+TestChiller = Chiller(1, 150, 10)
+# Here we define the chiller tons and kw s but its user input in future, we have to read this from CSV 
+tons = np.array([200, 180, 160, 140, 120, 100, 80, 60, 48])
+kws = np.array([236.10, 191.70, 157.20, 131.20, 105.70, 80.02, 59.81, 47.39, 41.89])
+n = 6  # need to find R value to optimize this
+
+
+
+
+
 #################################################################################################################
 
 
@@ -392,24 +440,16 @@ print('Running 4.d : EquipmentDemand Function')
 LoadProfile = calc_bldg_load_mbh()  # returns dataframe 'df' values
 
 # =============================================================================
-# *** User defined inputs ***
-
-TestEquipment = {'Quantity': 1, 'Size': 200, 'Turndown': 0.05}
-
-# Todo create popup to allow for user input
-
-# =============================================================================
 # Todo : Unmet hours count , so you can after 10 of unmet hours run at turn done 1 time
-
 
 # *** Defining the calculation Function ***
 def EquipmentDemand(row, title, Equipment):
     title = title
-    EquipQuantity = Equipment['Quantity']
-    EquipMax = Equipment['Size']
-    EquipTD = Equipment['Turndown']
+    EquipQuantity = Equipment.quantity
+    EquipMax = Equipment.capacityMBH
+    EquipTD = Equipment.turndown
 
-    if abs(row[title]) > EquipMax * EquipTD:
+    if abs(row[title]) > EquipMax * EquipTD/100:
         EquipmentOut = min(abs(row[title]), EquipMax * EquipQuantity)
     else:
         EquipmentOut = 0
@@ -419,14 +459,13 @@ def EquipmentDemand(row, title, Equipment):
 
 # =============================================================================
 # ***How to call this function ***
-# ***defining the data frames for output  ***
 
 ##this is a place holder for how we select which column to do calcs on
 EquipmentOutput = pd.DataFrame()
 
 # Function Call
 EquipmentOutput['TIME'] = LoadProfile['TIME']
-EquipmentOutput['EquipmentOutput'] = LoadProfile.apply(EquipmentDemand, title='HHWMBH', axis=1, Equipment=TestEquipment)
+EquipmentOutput['EquipmentOutput'] = LoadProfile.apply(EquipmentDemand, title='HHWMBH', axis=1, Equipment=TestBoiler)
 ## title in the call above is a place holder for how we select which column to do calcs on 
 
 print(EquipmentOutput.head())
@@ -444,30 +483,12 @@ print()
 ## Outputs BoilerConsumption
 
 # =============================================================================
-# *** User defined inputs ***
-
-# define a class for my boiler, maybe we want this in a function and read all the classes at once
-class Boiler:
-    def __init__(self, quantity, capacityMBH, turndown, efficiency):
-        self.quantity = quantity
-        self.capacityMBH = capacityMBH
-        self.turndown = turndown  # number in percent. like 10
-        self.efficiency = efficiency  # just the number like 81
-
-
-# Create a test boiler
-TestBoiler = Boiler(1, 200, 10, 81)
-
-
-# Todo create popup to a lot for user input
-
-# =============================================================================
 # *** Defining the calculation Function ***
 
 def BoilerInput(row, title, Boiler):
     title = title
     BoilerEfficiency = Boiler.efficiency
-    return row[title] * BoilerEfficiency / 100
+    return row[title] *100 / BoilerEfficiency 
 
 
 # =============================================================================
@@ -493,24 +514,6 @@ print()
 ## Outputs R, ChillerKw
 # =============================================================================
 
-# define a class for my Chiller, maybe we want this in a function and read all the classes at once
-class Chiller:
-    def __init__(self, quantity, capacityMBH, turndown):
-        self.quantity = quantity
-        self.capacityMBH = capacityMBH
-        self.turndown = turndown  # number in percent. like 10
-
-
-# Create a test boiler
-TestChiller = Chiller(1, 150, 10)
-
-# =============================================================================
-# Here we define the chiller tons and kw s but its user input in future, we have to read this from CSV 
-tons = np.array([200, 180, 160, 140, 120, 100, 80, 60, 48])
-kws = np.array([236.10, 191.70, 157.20, 131.20, 105.70, 80.02, 59.81, 47.39, 41.89])
-n = 6  # need to find R value to optimize this
-
-
 # =============================================================================
 
 # =============================================================================
@@ -530,12 +533,46 @@ def ChillerConsumption(Load, curveTons, curveKws):
 # how to call this function
 ChillerKwConsumption = pd.DataFrame()
 ChillerKwConsumption['TIME'] = LoadProfile['TIME']
-title = 'HHWMBH'  # this is where we select which column to use
+title = 'CHWMBH'  # this is where we select which column to use
 ChillerKwConsumption['Chiller_KW'] = pd.DataFrame(ChillerConsumption(LoadProfile[title], curveTons=tons, curveKws=kws))
 
 print(BoilerConsumption.head())
 print('End of 4.f : ChillerConsumption Function')
 print()
+
+
+
+# =============================================================================
+##############################################################################
+# 4. PUMP POWER CONSUMPTION
+##############################################################################
+
+#Have to fix Later
+flow = pd.DataFrame(data=LoadProfile['HHWFLOW'])
+
+
+# =============================================================================
+
+def PumpConsumption(row, pump):
+    GPM = pump.MaxGPM
+    TD = pump.turndown
+    HP = pump.HP
+    if row['HHWFLOW'] > (GPM * TD / 100):
+        power = ((row['HHWFLOW'] / GPM) ** 3) * HP
+    else:
+        power = 0
+    return power
+
+
+# output data frame
+PumpKw = pd.DataFrame(columns=['Pump Consumption'])
+
+# =============================================================================
+# Function Call
+
+PumpKw['Pump Consumption'] = flow.apply(PumpConsumption, axis=1, pump=CHWP1)
+
+
 
 # =============================================================================
 ##############################################################################
@@ -688,15 +725,15 @@ Energycost.apply(Energycalc, axis=1, Energy_usage=Energyusage)
 Energycost.to_csv('Costofenergy.csv')
 
 #################### TOTAL ENERGY USAGE FOR THE YEAR ##################
-Annual_cost = Energycost['Costofenergy'].sum()
-Min_cost = Energycost['Costofenergy'].min()
-Max_cost = Energycost['Costofenergy'].max()
+#Annual_cost = Energycost['Costofenergy'].sum()
+#Min_cost = Energycost['Costofenergy'].min()
+#Max_cost = Energycost['Costofenergy'].max()
 
-print(Annual_cost, ' is the ANNUAL cost of electricity')
-print(Min_cost, ' is the MINIMUM cost of energy for the timestamp')
-print(Max_cost, ' is the MAXIMUM cost of energy for the timestamp')
+# print(Annual_cost, ' is the ANNUAL cost of electricity')
+# print(Min_cost, ' is the MINIMUM cost of energy for the timestamp')
+# print(Max_cost, ' is the MAXIMUM cost of energy for the timestamp')
 print('End of 4.g : Electric Cost Calculator Function')
-print()
+# print()
 
 ##############################################################################
 # 4.h: Gas Cost Calculator FUnction
@@ -832,51 +869,8 @@ def plot_x(df):
 ## Input : Pumps information {quantity, hp, MaxGPM, turndown, efficiency, *config }
 ## Outputs PumpKw
 
-# define a class for pumps, maybe we want this in a function and read all the classes at once
-class Pump:
-    def __init__(self, quantity, HP, MaxGPM, turndown, efficiency):
-        self.quantity = quantity
-        self.HP = HP
-        self.MaxGPM = MaxGPM
-        self.turndown = turndown
-        self.efficiency = efficiency
-
-
-# =============================================================================
-# I defined the pump variables here, but we would like this to be read from a file
-
-CHWP1 = Pump(1, 10, 40, 10, 90)
-print(CHWP1.__dict__)
-# =============================================================================
-
-# =============================================================================
-# here i am reading the excel file directly, but later we have to just read the correct column in the clean data
-data_path = 'C:/Users/Taraneh/Documents/GitHub/Heating-Energy/Inputs'
-
-Data = pd.read_csv(data_path + '/2019 CHP Raw Trend.CSV', index_col=0)
-
-# just picking the column i want for now
-
-flow = pd.DataFrame(data=Data['CHP Flow'])
-
 
 # =============================================================================
 
-def PumpConsumption(row, pump):
-    GPM = pump.MaxGPM
-    TD = pump.turndown
-    HP = pump.HP
-    if row['CHP Flow'] > (GPM * TD / 100):
-        power = ((row['CHP Flow'] / GPM) ** 3) * HP
-    else:
-        power = 0
-    return power
-
-
-# output data frame
-PumpKw = pd.DataFrame(columns=['Pump Consumption'])
-
 # =============================================================================
-# Function Call
 
-PumpKw['Pump Consumption'] = flow.apply(PumpConsumption, axis=1, pump=CHWP1)
