@@ -31,7 +31,6 @@ class Boiler:
         self.efficiency = efficiency  # just the number like 81
         
 
-
 # define a class for my Chiller, maybe we want this in a function and read all the classes at once
 class Chiller:
     def __init__(self, quantity, capacityMBH, turndown):
@@ -402,11 +401,11 @@ def calc_bldg_load_mbh():
     results['CHWR_TEMP'] = df['UVO_CHWR_TEMP']
     results['CHWFLOW'] = df['UVO_CHW_RET_FLOW'].str.replace(",", "").astype(float)
 
-    results['HHWMBH'] = (500 * (results['HHWS_TEMP'] - results['HHWR_TEMP'])
-                         * results['HHWFLOW'] / 1000).__round__(2)
+    results['HHWMBH'] = abs ((500 * (results['HHWS_TEMP'] - results['HHWR_TEMP'])
+                         * results['HHWFLOW'] / 1000).__round__(2) )
 
-    results['CHWMBH'] = (500 * (results['CHWS_TEMP'] - results['CHWR_TEMP'])
-                         * results['CHWFLOW'] / 1000).__round__(2)
+    results['CHWMBH'] = abs ((500 * (results['CHWS_TEMP'] - results['CHWR_TEMP'])
+                         * results['CHWFLOW'] / 1000).__round__(2) )
 
     # ToDo need to do the same for chiller water for now
 
