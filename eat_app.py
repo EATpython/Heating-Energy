@@ -34,11 +34,11 @@ left in as an example. Take a look at the [Streamlit documentation](https://docs
 [Streamlit gallery](https://streamlit.io/gallery) for inspiration.
 
 Here's an example of working with uploaded files. Upload a .csv file with timestamps in the first column and trend data 
-in the remaining columns.
-
-Here's an example of a button. Click "See example"."""
+in the remaining columns."""
 
 uploaded_file = st.file_uploader("Choose a file")
+
+st.write("Here's an example of a button. Click 'See example'.")
 
 if st.button('See example'):
     df = pd.read_csv(example_data_path + random.choice(os.listdir(example_data_path)))  # pick a random example file
