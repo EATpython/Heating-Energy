@@ -27,13 +27,16 @@ st.image(logo, width=None)
 into any bugs/errors or have suggestions for additional features/functionality, please use the "Report a bug with 
 this app" tool in the drop down menu in the top right corner of this page. Thanks for playing!` 
 
-# Trend Data Visualization App
+# Building Energy Analysis App
 
-Quickly visualize lots of trend data to gain engineering insights and make nice-looking graphs to include in 
-reports/presentations. 
+This app doesn't do anything yet. Edit the code to make stuff happen. Some functionality from the trend data app is
+left in as an example. Take a look at the [Streamlit documentation](https://docs.streamlit.io/en/stable/) and the 
+[Streamlit gallery](https://streamlit.io/gallery) for inspiration.
 
-To get started, upload a .csv file with timestamps in the first column and trend data in the remaining columns - or 
-click "See example"."""
+Here's an example of working with uploaded files. Upload a .csv file with timestamps in the first column and trend data 
+in the remaining columns.
+
+Here's an example of a button. Click "See example"."""
 
 uploaded_file = st.file_uploader("Choose a file")
 

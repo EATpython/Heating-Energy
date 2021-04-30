@@ -45,8 +45,8 @@ from eatlib import * # import eatlib - the only library you'll ever need
 
 # 3: plot clean EAT data using plot_time - STABLE
 # define paths and filenames
-filepath_in = './DataCleaner Output Files/' # use output files from JH_CSV_DataCleaner
-filepath_out = './Plots/'   # where the plot gets saved
+filepath_in = '../DataCleaner Output Files/'  # use output files from JH_CSV_DataCleaner
+filepath_out = '../Plots/'  # where the plot gets saved
 file_name = '2019 CHP Raw Trend_OUT_Clean_Data' #name of the file w/o .csv suffix (used to conveniently name plots, but maybe not robust)
 
 df = pd.read_csv(filepath_in + file_name + '.csv') # read data into a DataFrame and print some info
