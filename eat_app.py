@@ -29,7 +29,7 @@ this app" tool in the drop down menu in the top right corner of this page. Thank
 
 # Building Energy Analysis App
 
-This app doesn't do anything yet. Edit the code to make stuff happen. Some functionality from the trend data app is
+This app doesn't do anything yet. Edit the code to make it do stuff. Some functionality from the trend data app is
 left in as an example. Take a look at the [Streamlit documentation](https://docs.streamlit.io/en/stable/) and the 
 [Streamlit gallery](https://streamlit.io/gallery) for inspiration.
 
